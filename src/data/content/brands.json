@@ -1,0 +1,12 @@
+{
+  "categories": [
+    {
+      "name": "Dock Equipment",
+      "brands": ["Nordock", "Serco", "McGuire", "Poweramp", "Blue Giant", "Pentalift", "Vestil", "Kelley"]
+    },
+    {
+      "name": "Industrial Doors",
+      "brands": ["Amarr", "Rytec", "Albany", "Raynor", "CHI", "Cornell", "Cookson", "ASI Doors", "Hörmann", "Rite-Hite", "ASSA ABLOY"]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+[
+  {
+    "name": "Dock Equipment",
+    "slug": "dock-equipment",
+    "shortDescription": "Dock levelers, vehicle restraints, dock seals, and bumpers installed and serviced to keep your loading operations running at full speed.",
+    "description": "MetaForge provides and installs the full spectrum of dock equipment — levelers, restraints, seals, bumpers, and lights — engineered for high-cycle commercial and industrial facilities. We work with top brands and deliver installations that hold up under real-world abuse.",
+    "bullets": [
+      "Dock levelers (hydraulic, mechanical, air-powered)",
+      "Vehicle restraints and dock locks",
+      "Dock seals and shelters",
+      "Dock bumpers and wheel chocks",
+      "Dock lighting systems",
+      "Edge-of-dock levelers",
+      "Portable dock plates and boards"
+    ],
+    "image": "https://metaforgeis.com/wp-content/uploads/2025/07/IMG_9924-1024x768.jpg",
+    "brands": ["Nordock", "Serco", "McGuire", "Poweramp", "Blue Giant", "Pentalift", "Vestil", "Kelley"]
+  },
+  {
+    "name": "Industrial Doors",
+    "slug": "industrial-doors",
+    "shortDescription": "Overhead sectional, high-speed, freezer, and rolling steel doors — properly specified, professionally installed, and ready for production environments.",
+    "description": "From standard overhead sectionals to high-cycle high-speed doors for cold storage and clean rooms, MetaForge has the product knowledge and installation experience to get the right door in the right opening — the first time.",
+    "bullets": [
+      "Overhead sectional doors (commercial grade)",
+      "High-speed roll-up doors",
+      "Freezer and cooler doors",
+      "Rolling steel service doors",
+      "Fire-rated doors and shutters",
+      "Insulated steel doors for temperature-controlled facilities",
+      "Loading dock door systems"
+    ],
+    "image": "https://metaforgeis.com/wp-content/uploads/2025/07/IMG_0141-1024x768.jpg",
+    "brands": ["Amarr", "Rytec", "Albany", "Raynor", "CHI", "Cornell", "Cookson", "ASI Doors", "Hörmann", "Rite-Hite", "ASSA ABLOY"]
+  },
+  {
+    "name": "Emergency Repair",
+    "slug": "emergency-repair",
+    "shortDescription": "24/7 emergency response for docks and doors. When your facility goes down, we show up — fast, equipped, and ready to work.",
+    "description": "A broken dock or door is a stopped facility. MetaForge runs 24/7 emergency response across our DFW and Omaha service areas. We dispatch experienced technicians with stocked trucks — not call centers with estimated arrival windows.",
+    "bullets": [
+      "24/7 emergency dispatch, 365 days a year",
+      "Trucks stocked with common parts",
+      "Experienced technicians, not subcontractors",
+      "Coverage across DFW and Omaha-Council Bluffs",
+      "Immediate assessment and clear communication",
+      "Temporary solutions when full repair must wait"
+    ],
+    "image": "https://metaforgeis.com/wp-content/uploads/2025/07/IMG_0485.jpeg",
+    "brands": []
+  },
+  {
+    "name": "Planned Maintenance",
+    "slug": "planned-maintenance",
+    "shortDescription": "Structured preventive maintenance programs that eliminate surprise breakdowns and keep your equipment in peak operating condition.",
+    "description": "Reactive repair is expensive. MetaForge preventive maintenance programs catch problems before they stop production. We build custom PM schedules based on your facility's door and dock count, cycle volumes, and operational priorities.",
+    "bullets": [
+      "Custom PM schedules (monthly, quarterly, semi-annual)",
+      "Full dock and door system inspections",
+      "Lubrication, adjustment, and calibration",
+      "Safety compliance checks",
+      "Detailed maintenance reports",
+      "Priority response for PM customers",
+      "Multi-location contract options"
+    ],
+    "image": "https://metaforgeis.com/wp-content/uploads/2025/10/facilitySupport-1-1024x765.png",
+    "brands": []
+  },
+  {
+    "name": "Parts Supply",
+    "slug": "parts-supply",
+    "shortDescription": "OEM and quality aftermarket parts for all major dock and door brands. If we installed it, we can get the part for it.",
+    "description": "MetaForge maintains parts inventory and supplier relationships with all major dock and door manufacturers. Whether you need OEM replacement parts or quality aftermarket equivalents, we source fast and deliver to your facility.",
+    "bullets": [
+      "OEM parts for all major brands",
+      "Quality aftermarket alternatives",
+      "Dock leveler springs, cylinders, and controls",
+      "Door panels, hardware, and operators",
+      "Seals, bumpers, and safety components",
+      "Vehicle restraint parts",
+      "Emergency parts sourcing"
+    ],
+    "image": "https://metaforgeis.com/wp-content/uploads/2025/10/NordockParts.jpg",
+    "brands": ["Nordock", "Serco", "McGuire", "Amarr", "Rytec", "Albany", "Raynor"]
+  },
+  {
+    "name": "New Installations",
+    "slug": "dock-equipment",
+    "shortDescription": "New facility buildouts, dock and door system design, and complete installation services for commercial and industrial projects.",
+    "description": "New construction or major renovation? MetaForge works with general contractors, facility managers, and real estate developers to specify and install complete dock and door systems. We design for your operational requirements — not just what's on the drawing.",
+    "bullets": [
+      "Dock system design and specification",
+      "Complete dock and door installation",
+      "General contractor coordination",
+      "Multi-door and multi-dock projects",
+      "Phased installation support",
+      "Post-installation commissioning and training",
+      "Warranty coverage on all installations"
+    ],
+    "image": "https://metaforgeis.com/wp-content/uploads/2025/07/IMG_2212-1.jpeg",
+    "brands": []
+  }
+]

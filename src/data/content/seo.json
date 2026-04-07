@@ -1,0 +1,46 @@
+{
+  "/": {
+    "title": "MetaForge Industrial Systems | Dock & Door Service TX & Midwest",
+    "description": "MetaForge Industrial Systems delivers precision dock equipment and industrial door installation, repair, and maintenance across DFW and Omaha. 24/7 emergency response."
+  },
+  "/services": {
+    "title": "Industrial Dock & Door Services | MetaForge Industrial Systems",
+    "description": "Complete dock and door services: levelers, restraints, overhead doors, high-speed doors, emergency repair, and planned maintenance programs."
+  },
+  "/services/dock-equipment": {
+    "title": "Dock Equipment Installation & Service | MetaForge",
+    "description": "Dock levelers, vehicle restraints, dock seals, and bumpers — installed and serviced by experienced technicians across DFW and Omaha."
+  },
+  "/services/industrial-doors": {
+    "title": "Industrial Door Installation | Overhead, High-Speed & Freezer Doors | MetaForge",
+    "description": "Overhead sectional, high-speed, freezer, and rolling steel door installation and service for commercial and industrial facilities."
+  },
+  "/services/emergency-repair": {
+    "title": "24/7 Emergency Dock & Door Repair | MetaForge Industrial Systems",
+    "description": "When your dock or door goes down, we show up. 24/7 emergency repair service across DFW and Omaha-Council Bluffs. Call 833-META-SOS."
+  },
+  "/services/planned-maintenance": {
+    "title": "Planned Dock & Door Maintenance Programs | MetaForge",
+    "description": "Preventive maintenance programs for commercial dock and door systems. Eliminate surprise breakdowns and keep equipment at peak performance."
+  },
+  "/services/parts-supply": {
+    "title": "Dock & Door Parts Supply | OEM & Aftermarket | MetaForge",
+    "description": "OEM and quality aftermarket parts for all major dock and door brands. Fast sourcing and delivery for DFW and Omaha facilities."
+  },
+  "/our-work": {
+    "title": "Our Work | MetaForge Industrial Systems Project Gallery",
+    "description": "See MetaForge Industrial Systems in action — dock equipment installations, industrial door projects, and facility work across Texas and the Midwest."
+  },
+  "/locations": {
+    "title": "Dock & Door Service in Dallas-Fort Worth & Omaha | MetaForge",
+    "description": "Two regional service locations: Flower Mound, TX serving DFW and Crescent, IA serving Omaha-Council Bluffs. Call (866) 563-8247."
+  },
+  "/about": {
+    "title": "About MetaForge Industrial Systems | Dock & Door Experts",
+    "description": "30+ years of industry experience, two regional locations, and a zero-excuses service culture. Learn why MetaForge is the operator's choice for dock and door."
+  },
+  "/contact": {
+    "title": "Contact MetaForge Industrial Systems | Request a Quote",
+    "description": "Contact MetaForge for dock equipment, industrial doors, emergency repair, or planned maintenance. Request a quote or call (866) 563-8247."
+  }
+}

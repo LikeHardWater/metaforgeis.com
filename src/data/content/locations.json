@@ -1,0 +1,32 @@
+[
+  {
+    "id": "dfw",
+    "name": "Dallas-Fort Worth",
+    "region": "Texas",
+    "address": "4351 Cross Timbers Rd, Suite 400",
+    "city": "Flower Mound",
+    "state": "TX",
+    "zip": "75022",
+    "phone": "(866) 563-8247",
+    "email": "info@metaforgeis.com",
+    "salesContact": "eric.forbus@metaforgeis.com",
+    "salesPhone": "(563) 205-4547",
+    "description": "Serving the entire DFW Metroplex — from Fort Worth to Garland, Lewisville to Arlington. Our Flower Mound location puts us within striking distance of the region's largest distribution centers, cold storage facilities, and manufacturing plants.",
+    "serviceArea": "Dallas, Fort Worth, Frisco, Plano, Lewisville, Denton, Arlington, Irving, and surrounding areas"
+  },
+  {
+    "id": "omaha",
+    "name": "Omaha-Council Bluffs",
+    "region": "Iowa/Nebraska",
+    "address": "902 Old Lincoln Hwy",
+    "city": "Crescent",
+    "state": "IA",
+    "zip": "51526",
+    "phone": "(866) 563-8247",
+    "email": "info@metaforgeis.com",
+    "salesContact": "eric.forbus@metaforgeis.com",
+    "salesPhone": "(563) 205-4547",
+    "description": "Covering the greater Omaha metro and Council Bluffs area. Our Crescent, Iowa location serves the logistics corridor along I-80, including the region's warehouse, food processing, and agricultural distribution facilities.",
+    "serviceArea": "Omaha, Council Bluffs, Bellevue, Papillion, La Vista, Gretna, and surrounding areas"
+  }
+]
