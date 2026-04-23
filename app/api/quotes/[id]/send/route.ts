@@ -33,7 +33,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const baseUrl = process.env.METAFORGE_BASE_URL ?? 'https://metaforgeis.com'
   const fmt = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 2 })
 
-  const lineItemRows = quote.lineItems.map((li) => `
+  const lineItemRows = quote.lineItems.map((li: { description: string; quantity: unknown; unitPrice: unknown; discount: unknown; taxRate: unknown; lineTotal: unknown }) => `
     <tr>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">${li.description}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">${Number(li.quantity)}</td>
