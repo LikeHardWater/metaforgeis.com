@@ -15,7 +15,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
 
   return (
     <motion.article
-      className="group bg-dark-secondary border border-dark-tertiary rounded-lg overflow-hidden hover:border-gold/40 transition-all duration-300"
+      className="group bg-gray-50 border border-gray-200 rounded-lg overflow-hidden hover:border-gold/40 transition-all duration-300"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -23,7 +23,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
       transition={{ duration: 0.3 }}
     >
       {/* Image */}
-      <div className="relative h-48 bg-dark-tertiary">
+      <div className="relative h-48 bg-gray-100">
         {service.image ? (
           <Image
             src={service.image}
@@ -37,17 +37,17 @@ export function ServiceCard({ service }: ServiceCardProps) {
             }}
           />
         ) : (
-          <div className="w-full h-full bg-dark-tertiary" />
+          <div className="w-full h-full bg-gray-100" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-dark-secondary/60 to-transparent" />
       </div>
 
       {/* Content */}
       <div className="p-6">
-        <h3 className="text-white font-bold text-lg mb-2 group-hover:text-gold transition-colors">
+        <h3 className="text-gray-900 font-bold text-lg mb-2 group-hover:text-gold transition-colors">
           {service.name}
         </h3>
-        <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
+        <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
           {service.shortDescription}
         </p>
         <Link

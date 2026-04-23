@@ -18,7 +18,7 @@ export function SafeImage({ fallbackClassName, className, alt, ...props }: SafeI
 
   if (error) {
     return (
-      <div className={`w-full h-full bg-dark-tertiary flex items-center justify-center ${fallbackClassName ?? ''}`}>
+      <div className={`w-full h-full bg-gray-100 flex items-center justify-center ${fallbackClassName ?? ''}`}>
         <ImageOff className="w-8 h-8 text-gray-600" aria-hidden="true" />
       </div>
     )

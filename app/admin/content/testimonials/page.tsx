@@ -41,18 +41,18 @@ export default function TestimonialsEditorPage() {
     setTimeout(() => setStatus('idle'), 3000)
   }
 
-  if (!loaded) return <AdminLayout><div className="text-gray-400 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
+  if (!loaded) return <AdminLayout><div className="text-gray-500 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
 
   return (
     <AdminLayout>
       <div className="max-w-3xl">
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
-            <h1 className="text-xl font-black text-white">Testimonials</h1>
-            <p className="text-gray-400 text-sm">Customer quotes — shown on homepage</p>
+            <h1 className="text-xl font-black text-gray-900">Testimonials</h1>
+            <p className="text-gray-500 text-sm">Customer quotes — shown on homepage</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
+            <a href="/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
               <ExternalLink className="w-4 h-4" /> Preview
             </a>
             <button onClick={save} disabled={status === 'saving' || !dirty}
@@ -64,41 +64,41 @@ export default function TestimonialsEditorPage() {
         </div>
 
         {status === 'saved' && <div className="flex items-center gap-2 text-green-400 text-sm bg-green-900/20 border border-green-800 rounded p-3 mb-6"><CheckCircle className="w-4 h-4" /> Saved.</div>}
-        {status === 'error' && <div className="flex items-center gap-2 text-red-400 text-sm bg-red-900/20 border border-red-800 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
+        {status === 'error' && <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
 
         <div className="flex flex-col gap-4 mb-4">
           {items.length === 0 && (
-            <p className="text-gray-500 text-sm py-8 text-center border border-dark-tertiary rounded-lg">No testimonials yet. Add one below.</p>
+            <p className="text-gray-500 text-sm py-8 text-center border border-gray-200 rounded-lg">No testimonials yet. Add one below.</p>
           )}
           {items.map((t, i) => (
-            <div key={i} className="bg-dark-secondary border border-dark-tertiary rounded-lg p-5">
+            <div key={i} className="bg-gray-50 border border-gray-200 rounded-lg p-5">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-gold text-xs font-bold uppercase tracking-widest">Testimonial #{i + 1}</span>
-                <button onClick={() => remove(i)} className="text-gray-500 hover:text-red-400 transition-colors p-1 min-h-[44px] flex items-center" aria-label={`Remove testimonial ${i + 1}`}>
+                <button onClick={() => remove(i)} className="text-gray-500 hover:text-red-600 transition-colors p-1 min-h-[44px] flex items-center" aria-label={`Remove testimonial ${i + 1}`}>
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
               <div className="flex flex-col gap-3">
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">Quote</label>
+                  <label className="block text-xs text-gray-500 mb-1">Quote</label>
                   <textarea value={t.quote} onChange={(e) => update(i, 'quote', e.target.value)} rows={3}
-                    className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-3 py-2 text-white text-sm focus:outline-none resize-y" />
+                    className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-3 py-2 text-gray-900 text-sm focus:outline-none resize-y" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">Name</label>
+                    <label className="block text-xs text-gray-500 mb-1">Name</label>
                     <input type="text" value={t.name} onChange={(e) => update(i, 'name', e.target.value)}
-                      className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-3 py-2 text-white text-sm focus:outline-none min-h-[44px]" />
+                      className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-3 py-2 text-gray-900 text-sm focus:outline-none min-h-[44px]" />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">Title</label>
+                    <label className="block text-xs text-gray-500 mb-1">Title</label>
                     <input type="text" value={t.title} onChange={(e) => update(i, 'title', e.target.value)}
-                      className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-3 py-2 text-white text-sm focus:outline-none min-h-[44px]" />
+                      className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-3 py-2 text-gray-900 text-sm focus:outline-none min-h-[44px]" />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">Company</label>
+                    <label className="block text-xs text-gray-500 mb-1">Company</label>
                     <input type="text" value={t.company} onChange={(e) => update(i, 'company', e.target.value)}
-                      className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-3 py-2 text-white text-sm focus:outline-none min-h-[44px]" />
+                      className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-3 py-2 text-gray-900 text-sm focus:outline-none min-h-[44px]" />
                   </div>
                 </div>
               </div>

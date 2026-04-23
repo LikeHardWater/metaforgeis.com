@@ -53,18 +53,18 @@ export default function AboutEditorPage() {
     setTimeout(() => setStatus('idle'), 3000)
   }
 
-  if (!data) return <AdminLayout><div className="text-gray-400 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
+  if (!data) return <AdminLayout><div className="text-gray-500 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
 
   return (
     <AdminLayout>
       <div className="max-w-2xl">
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
-            <h1 className="text-xl font-black text-white">About Page</h1>
-            <p className="text-gray-400 text-sm">Company story, headline, and core values</p>
+            <h1 className="text-xl font-black text-gray-900">About Page</h1>
+            <p className="text-gray-500 text-sm">Company story, headline, and core values</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/about" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
+            <a href="/about" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
               <ExternalLink className="w-4 h-4" /> Preview
             </a>
             <button onClick={save} disabled={status === 'saving' || !dirty}
@@ -76,36 +76,36 @@ export default function AboutEditorPage() {
         </div>
 
         {status === 'saved' && <div className="flex items-center gap-2 text-green-400 text-sm bg-green-900/20 border border-green-800 rounded p-3 mb-6"><CheckCircle className="w-4 h-4" /> Saved.</div>}
-        {status === 'error' && <div className="flex items-center gap-2 text-red-400 text-sm bg-red-900/20 border border-red-800 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
+        {status === 'error' && <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
 
-        <div className="bg-dark-secondary border border-dark-tertiary rounded-lg p-5 flex flex-col gap-4 mb-6">
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 flex flex-col gap-4 mb-6">
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Headline</label>
+            <label className="block text-xs text-gray-500 mb-1">Headline</label>
             <input type="text" value={data.headline} onChange={(e) => set('headline', e.target.value)}
-              className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-sm focus:outline-none min-h-[44px]" />
+              className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-sm focus:outline-none min-h-[44px]" />
           </div>
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Body Copy</label>
+            <label className="block text-xs text-gray-500 mb-1">Body Copy</label>
             <textarea value={data.body} onChange={(e) => set('body', e.target.value)} rows={5}
-              className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-sm focus:outline-none resize-y" />
+              className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-sm focus:outline-none resize-y" />
           </div>
         </div>
 
-        <h2 className="text-white font-bold text-sm mb-3">Core Values</h2>
+        <h2 className="text-gray-900 font-bold text-sm mb-3">Core Values</h2>
         <div className="flex flex-col gap-3 mb-4">
           {data.values.map((v, i) => (
-            <div key={i} className="bg-dark-secondary border border-dark-tertiary rounded-lg p-4">
+            <div key={i} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-gold text-xs uppercase tracking-widest font-bold">Value #{i + 1}</span>
-                <button onClick={() => removeValue(i)} className="text-gray-500 hover:text-red-400 transition-colors p-1 min-h-[44px] flex items-center">
+                <button onClick={() => removeValue(i)} className="text-gray-500 hover:text-red-600 transition-colors p-1 min-h-[44px] flex items-center">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
               <div className="flex flex-col gap-2">
                 <input type="text" value={v.title} placeholder="Value title" onChange={(e) => updateValue(i, 'title', e.target.value)}
-                  className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-sm focus:outline-none min-h-[44px]" />
+                  className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-sm focus:outline-none min-h-[44px]" />
                 <textarea value={v.description} placeholder="Description" onChange={(e) => updateValue(i, 'description', e.target.value)} rows={2}
-                  className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-sm focus:outline-none resize-y" />
+                  className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-sm focus:outline-none resize-y" />
               </div>
             </div>
           ))}

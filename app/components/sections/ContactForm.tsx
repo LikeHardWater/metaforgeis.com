@@ -60,8 +60,8 @@ export function ContactForm() {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
         <CheckCircle className="w-16 h-16 text-green-500 mb-4" aria-hidden="true" />
-        <h3 className="text-white font-black text-2xl mb-2">Message Sent!</h3>
-        <p className="text-gray-400 mb-6">
+        <h3 className="text-gray-900 font-black text-2xl mb-2">Message Sent!</h3>
+        <p className="text-gray-500 mb-6">
           We&apos;ll be in touch shortly. For urgent needs, call us at (866) 563-8247.
         </p>
         <button
@@ -86,14 +86,14 @@ export function ContactForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-600 mb-1">
             Full Name <span className="text-emergency" aria-hidden="true">*</span>
           </label>
           <input
             id="name"
             type="text"
             autoComplete="name"
-            className="w-full bg-dark-tertiary border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none transition-colors min-h-[44px]"
+            className="w-full bg-gray-100 border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors min-h-[44px]"
             placeholder="John Smith"
             {...register('name')}
             aria-invalid={!!errors.name}
@@ -106,14 +106,14 @@ export function ContactForm() {
 
         {/* Company */}
         <div>
-          <label htmlFor="company" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="company" className="block text-sm font-medium text-gray-600 mb-1">
             Company <span className="text-emergency" aria-hidden="true">*</span>
           </label>
           <input
             id="company"
             type="text"
             autoComplete="organization"
-            className="w-full bg-dark-tertiary border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none transition-colors min-h-[44px]"
+            className="w-full bg-gray-100 border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors min-h-[44px]"
             placeholder="ACME Distribution"
             {...register('company')}
             aria-invalid={!!errors.company}
@@ -126,14 +126,14 @@ export function ContactForm() {
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-1">
             Email <span className="text-emergency" aria-hidden="true">*</span>
           </label>
           <input
             id="email"
             type="email"
             autoComplete="email"
-            className="w-full bg-dark-tertiary border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none transition-colors min-h-[44px]"
+            className="w-full bg-gray-100 border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors min-h-[44px]"
             placeholder="john@company.com"
             {...register('email')}
             aria-invalid={!!errors.email}
@@ -146,14 +146,14 @@ export function ContactForm() {
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-600 mb-1">
             Phone <span className="text-gray-500 font-normal">(optional)</span>
           </label>
           <input
             id="phone"
             type="tel"
             autoComplete="tel"
-            className="w-full bg-dark-tertiary border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none transition-colors min-h-[44px]"
+            className="w-full bg-gray-100 border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors min-h-[44px]"
             placeholder="(555) 000-0000"
             {...register('phone')}
           />
@@ -162,12 +162,12 @@ export function ContactForm() {
 
       {/* Service */}
       <div>
-        <label htmlFor="service" className="block text-sm font-medium text-gray-300 mb-1">
+        <label htmlFor="service" className="block text-sm font-medium text-gray-600 mb-1">
           Service Type <span className="text-emergency" aria-hidden="true">*</span>
         </label>
         <select
           id="service"
-          className="w-full bg-dark-tertiary border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white focus:outline-none transition-colors min-h-[44px] appearance-none"
+          className="w-full bg-gray-100 border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 focus:outline-none transition-colors min-h-[44px] appearance-none"
           {...register('service')}
           aria-invalid={!!errors.service}
           aria-describedby={errors.service ? 'service-error' : undefined}
@@ -184,13 +184,13 @@ export function ContactForm() {
 
       {/* Message */}
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">
+        <label htmlFor="message" className="block text-sm font-medium text-gray-600 mb-1">
           Message <span className="text-emergency" aria-hidden="true">*</span>
         </label>
         <textarea
           id="message"
           rows={5}
-          className="w-full bg-dark-tertiary border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none transition-colors resize-vertical"
+          className="w-full bg-gray-100 border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors resize-vertical"
           placeholder="Describe your facility's needs, equipment types, number of doors/docks, urgency..."
           {...register('message')}
           aria-invalid={!!errors.message}

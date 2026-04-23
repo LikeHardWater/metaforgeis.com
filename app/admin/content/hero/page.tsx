@@ -36,18 +36,18 @@ export default function HeroEditorPage() {
     setTimeout(() => setStatus('idle'), 3000)
   }
 
-  if (!data) return <AdminLayout><div className="text-gray-400 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
+  if (!data) return <AdminLayout><div className="text-gray-500 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
 
   return (
     <AdminLayout>
       <div className="max-w-2xl">
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
-            <h1 className="text-xl font-black text-white">Hero Section</h1>
-            <p className="text-gray-400 text-sm">Homepage above-the-fold content</p>
+            <h1 className="text-xl font-black text-gray-900">Hero Section</h1>
+            <p className="text-gray-500 text-sm">Homepage above-the-fold content</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
+            <a href="/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
               <ExternalLink className="w-4 h-4" /> Preview
             </a>
             <button
@@ -67,42 +67,42 @@ export default function HeroEditorPage() {
           </div>
         )}
         {status === 'error' && (
-          <div className="flex items-center gap-2 text-red-400 text-sm bg-red-900/20 border border-red-800 rounded p-3 mb-6">
+          <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded p-3 mb-6">
             <AlertCircle className="w-4 h-4" /> Save failed. Check server logs.
           </div>
         )}
 
-        <div className="bg-dark-secondary border border-dark-tertiary rounded-lg p-6 flex flex-col gap-5">
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 flex flex-col gap-5">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Headline</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Headline</label>
             <input type="text" value={data.headline} onChange={(e) => update('headline', e.target.value)}
-              className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white focus:outline-none transition-colors min-h-[44px] text-sm" />
+              className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 focus:outline-none transition-colors min-h-[44px] text-sm" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Subheadline</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Subheadline</label>
             <textarea value={data.subheadline} onChange={(e) => update('subheadline', e.target.value)} rows={2}
-              className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white focus:outline-none transition-colors resize-y text-sm" />
+              className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 focus:outline-none transition-colors resize-y text-sm" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">CTA 1 Text</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1">CTA 1 Text</label>
               <input type="text" value={data.cta1Text} onChange={(e) => update('cta1Text', e.target.value)}
-                className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white focus:outline-none transition-colors min-h-[44px] text-sm" />
+                className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 focus:outline-none transition-colors min-h-[44px] text-sm" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">CTA 1 Link</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1">CTA 1 Link</label>
               <input type="text" value={data.cta1Link} onChange={(e) => update('cta1Link', e.target.value)}
-                className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white focus:outline-none transition-colors min-h-[44px] text-sm" />
+                className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 focus:outline-none transition-colors min-h-[44px] text-sm" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">CTA 2 Text</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1">CTA 2 Text</label>
               <input type="text" value={data.cta2Text} onChange={(e) => update('cta2Text', e.target.value)}
-                className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white focus:outline-none transition-colors min-h-[44px] text-sm" />
+                className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 focus:outline-none transition-colors min-h-[44px] text-sm" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">CTA 2 Link</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1">CTA 2 Link</label>
               <input type="text" value={data.cta2Link} onChange={(e) => update('cta2Link', e.target.value)}
-                className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded-lg px-4 py-3 text-white focus:outline-none transition-colors min-h-[44px] text-sm" />
+                className="w-full bg-white border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 focus:outline-none transition-colors min-h-[44px] text-sm" />
             </div>
           </div>
           <ImagePreviewInput

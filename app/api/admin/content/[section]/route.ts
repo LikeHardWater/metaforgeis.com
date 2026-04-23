@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/src/lib/auth'
+import { auth } from '@/src/lib/auth'
 import path from 'path'
 import fs from 'fs/promises'
 
@@ -30,7 +29,7 @@ export async function GET(
   }
 
   // Auth check for admin routes
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
@@ -55,7 +54,7 @@ export async function POST(
   }
 
   // Auth check
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }

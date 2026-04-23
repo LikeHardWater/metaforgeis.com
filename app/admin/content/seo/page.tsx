@@ -49,15 +49,15 @@ export default function SeoEditorPage() {
     setTimeout(() => setStatus('idle'), 3000)
   }
 
-  if (!data) return <AdminLayout><div className="text-gray-400 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
+  if (!data) return <AdminLayout><div className="text-gray-500 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
 
   return (
     <AdminLayout>
       <div className="max-w-3xl">
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
-            <h1 className="text-xl font-black text-white">SEO</h1>
-            <p className="text-gray-400 text-sm">Page titles and meta descriptions per route</p>
+            <h1 className="text-xl font-black text-gray-900">SEO</h1>
+            <p className="text-gray-500 text-sm">Page titles and meta descriptions per route</p>
           </div>
           <button onClick={save} disabled={status === 'saving' || !dirty}
             className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark disabled:opacity-50 text-dark-bg font-bold px-5 py-2.5 rounded transition-colors text-sm min-h-[44px]">
@@ -67,33 +67,33 @@ export default function SeoEditorPage() {
         </div>
 
         {status === 'saved' && <div className="flex items-center gap-2 text-green-400 text-sm bg-green-900/20 border border-green-800 rounded p-3 mb-6"><CheckCircle className="w-4 h-4" /> Saved.</div>}
-        {status === 'error' && <div className="flex items-center gap-2 text-red-400 text-sm bg-red-900/20 border border-red-800 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
+        {status === 'error' && <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
 
         <div className="flex flex-col gap-4">
           {ROUTES.map(({ route, label }) => (
-            <div key={route} className="bg-dark-secondary border border-dark-tertiary rounded-lg p-5">
+            <div key={route} className="bg-gray-50 border border-gray-200 rounded-lg p-5">
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-gold text-xs font-bold uppercase tracking-widest">{label}</span>
                 <span className="text-gray-600 text-xs font-mono">{route}</span>
               </div>
               <div className="flex flex-col gap-3">
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">
+                  <label className="block text-xs text-gray-500 mb-1">
                     Page Title <span className="text-gray-600">({(data[route]?.title ?? '').length}/70 chars)</span>
                   </label>
                   <input type="text" value={data[route]?.title ?? ''}
                     onChange={(e) => update(route, 'title', e.target.value)}
                     maxLength={80}
-                    className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-sm focus:outline-none min-h-[44px]" />
+                    className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-sm focus:outline-none min-h-[44px]" />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">
+                  <label className="block text-xs text-gray-500 mb-1">
                     Meta Description <span className="text-gray-600">({(data[route]?.description ?? '').length}/160 chars)</span>
                   </label>
                   <textarea value={data[route]?.description ?? ''}
                     onChange={(e) => update(route, 'description', e.target.value)}
                     rows={2} maxLength={200}
-                    className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-sm focus:outline-none resize-y" />
+                    className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-sm focus:outline-none resize-y" />
                 </div>
               </div>
             </div>

@@ -24,15 +24,15 @@ export default function DashboardPage() {
     <AdminLayout>
       <div className="max-w-5xl">
         <div className="mb-8">
-          <h1 className="text-2xl font-black text-white mb-1">Dashboard</h1>
-          <p className="text-gray-400 text-sm">Manage all site content from one place.</p>
+          <h1 className="text-2xl font-black text-gray-900 mb-1">Dashboard</h1>
+          <p className="text-gray-500 text-sm">Manage all site content from one place.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sections.map((section) => {
             const Icon = section.icon
             return (
-              <div key={section.href} className="bg-dark-secondary border border-dark-tertiary rounded-lg p-5 hover:border-gold/40 transition-colors">
+              <div key={section.href} className="bg-gray-50 border border-gray-200 rounded-lg p-5 hover:border-gold/40 transition-colors">
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-9 h-9 bg-gold/10 rounded-lg flex items-center justify-center">
                     <Icon className="w-5 h-5 text-gold" aria-hidden="true" />
@@ -47,7 +47,7 @@ export default function DashboardPage() {
                     <ExternalLink className="w-4 h-4" />
                   </a>
                 </div>
-                <h2 className="text-white font-bold text-sm mb-1">{section.label}</h2>
+                <h2 className="text-gray-900 font-bold text-sm mb-1">{section.label}</h2>
                 <p className="text-gray-500 text-xs mb-4 leading-relaxed">{section.description}</p>
                 <Link
                   href={section.href}

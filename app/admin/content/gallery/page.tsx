@@ -41,18 +41,18 @@ export default function GalleryEditorPage() {
     setTimeout(() => setStatus('idle'), 3000)
   }
 
-  if (!loaded) return <AdminLayout><div className="text-gray-400 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
+  if (!loaded) return <AdminLayout><div className="text-gray-500 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
 
   return (
     <AdminLayout>
       <div className="max-w-4xl">
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
-            <h1 className="text-xl font-black text-white">Gallery</h1>
-            <p className="text-gray-400 text-sm">Project photos — shown on Our Work page</p>
+            <h1 className="text-xl font-black text-gray-900">Gallery</h1>
+            <p className="text-gray-500 text-sm">Project photos — shown on Our Work page</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/our-work" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
+            <a href="/our-work" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
               <ExternalLink className="w-4 h-4" /> Preview
             </a>
             <button onClick={save} disabled={status === 'saving' || !dirty}
@@ -64,7 +64,7 @@ export default function GalleryEditorPage() {
         </div>
 
         {status === 'saved' && <div className="flex items-center gap-2 text-green-400 text-sm bg-green-900/20 border border-green-800 rounded p-3 mb-6"><CheckCircle className="w-4 h-4" /> Saved.</div>}
-        {status === 'error' && <div className="flex items-center gap-2 text-red-400 text-sm bg-red-900/20 border border-red-800 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
+        {status === 'error' && <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
 
         <p className="text-gray-600 text-xs mb-4">
           Note: Drag-to-reorder will be available in a future update. To reorder, delete and re-add images in the desired sequence.
@@ -72,16 +72,16 @@ export default function GalleryEditorPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           {items.map((img, i) => (
-            <div key={i} className="bg-dark-secondary border border-dark-tertiary rounded-lg p-4">
+            <div key={i} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-gray-500 text-xs">Image #{i + 1}</span>
-                <button onClick={() => remove(i)} className="text-gray-500 hover:text-red-400 transition-colors p-1 min-h-[44px] flex items-center" aria-label="Remove image">
+                <button onClick={() => remove(i)} className="text-gray-500 hover:text-red-600 transition-colors p-1 min-h-[44px] flex items-center" aria-label="Remove image">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Thumbnail */}
-              <div className="relative h-32 bg-dark-tertiary rounded-lg overflow-hidden mb-3">
+              <div className="relative h-32 bg-gray-100 rounded-lg overflow-hidden mb-3">
                 {img.url && !imgErrors.has(i) ? (
                   <Image src={img.url} alt={img.alt || 'Gallery image'} fill className="object-cover"
                     onError={() => setImgErrors((s) => new Set(s).add(i))} unoptimized={img.url.startsWith('http')} />
@@ -95,10 +95,10 @@ export default function GalleryEditorPage() {
               <div className="flex flex-col gap-2">
                 <input type="url" value={img.url} placeholder="Image URL"
                   onChange={(e) => { setImgErrors((s) => { const n = new Set(s); n.delete(i); return n }); update(i, 'url', e.target.value) }}
-                  className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-xs focus:outline-none min-h-[44px]" />
+                  className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-xs focus:outline-none min-h-[44px]" />
                 <input type="text" value={img.alt} placeholder="Alt text (describe the image)"
                   onChange={(e) => update(i, 'alt', e.target.value)}
-                  className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-xs focus:outline-none min-h-[44px]" />
+                  className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-xs focus:outline-none min-h-[44px]" />
               </div>
             </div>
           ))}

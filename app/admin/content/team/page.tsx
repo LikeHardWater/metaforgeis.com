@@ -41,18 +41,18 @@ export default function TeamEditorPage() {
     setTimeout(() => setStatus('idle'), 3000)
   }
 
-  if (!loaded) return <AdminLayout><div className="text-gray-400 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
+  if (!loaded) return <AdminLayout><div className="text-gray-500 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div></AdminLayout>
 
   return (
     <AdminLayout>
       <div className="max-w-2xl">
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
-            <h1 className="text-xl font-black text-white">Team</h1>
-            <p className="text-gray-400 text-sm">Leadership and key contacts</p>
+            <h1 className="text-xl font-black text-gray-900">Team</h1>
+            <p className="text-gray-500 text-sm">Leadership and key contacts</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/about" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
+            <a href="/about" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gold text-sm flex items-center gap-1 min-h-[44px]">
               <ExternalLink className="w-4 h-4" /> Preview
             </a>
             <button onClick={save} disabled={status === 'saving' || !dirty}
@@ -64,23 +64,23 @@ export default function TeamEditorPage() {
         </div>
 
         {status === 'saved' && <div className="flex items-center gap-2 text-green-400 text-sm bg-green-900/20 border border-green-800 rounded p-3 mb-6"><CheckCircle className="w-4 h-4" /> Saved.</div>}
-        {status === 'error' && <div className="flex items-center gap-2 text-red-400 text-sm bg-red-900/20 border border-red-800 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
+        {status === 'error' && <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded p-3 mb-6"><AlertCircle className="w-4 h-4" /> Save failed.</div>}
 
         <div className="flex flex-col gap-4 mb-4">
           {items.map((member, i) => (
-            <div key={i} className="bg-dark-secondary border border-dark-tertiary rounded-lg p-5">
+            <div key={i} className="bg-gray-50 border border-gray-200 rounded-lg p-5">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-gold text-xs uppercase tracking-widest font-bold">Member #{i + 1}</span>
-                <button onClick={() => remove(i)} className="text-gray-500 hover:text-red-400 transition-colors p-1 min-h-[44px] flex items-center">
+                <button onClick={() => remove(i)} className="text-gray-500 hover:text-red-600 transition-colors p-1 min-h-[44px] flex items-center">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {([['name', 'Full Name'], ['title', 'Title'], ['email', 'Email'], ['phone', 'Phone']] as [keyof TeamMember, string][]).map(([key, label]) => (
                   <div key={key}>
-                    <label className="block text-xs text-gray-400 mb-1">{label}</label>
+                    <label className="block text-xs text-gray-500 mb-1">{label}</label>
                     <input type="text" value={String(member[key] ?? '')} onChange={(e) => update(i, key, e.target.value)}
-                      className="w-full bg-dark-bg border border-dark-tertiary focus:border-gold rounded px-3 py-2 text-white text-sm focus:outline-none min-h-[44px]" />
+                      className="w-full bg-white border border-gray-200 focus:border-gold rounded px-3 py-2 text-gray-900 text-sm focus:outline-none min-h-[44px]" />
                   </div>
                 ))}
               </div>

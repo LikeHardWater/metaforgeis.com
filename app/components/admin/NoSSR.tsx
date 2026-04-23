@@ -15,7 +15,7 @@ export function NoSSR({ children, fallback = null }: { children: React.ReactNode
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         {fallback ?? (
           <div className="text-gray-500 text-sm">Loading...</div>
         )}

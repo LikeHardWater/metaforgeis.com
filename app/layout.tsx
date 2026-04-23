@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { EmergencyBanner } from '@/app/components/layout/EmergencyBanner'
-import { Header } from '@/app/components/layout/Header'
-import { Footer } from '@/app/components/layout/Footer'
+import { MarketingHeader, MarketingFooter } from '@/app/components/layout/MarketingChrome'
 
 export const metadata: Metadata = {
   title: 'MetaForge Industrial Systems | Dock & Door Service TX & Midwest',
@@ -18,11 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased bg-dark-bg text-white">
-        <EmergencyBanner />
-        <Header />
+      <body className="antialiased">
+        <MarketingHeader />
         <main>{children}</main>
-        <Footer />
+        <MarketingFooter />
       </body>
     </html>
   )

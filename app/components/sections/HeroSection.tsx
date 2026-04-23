@@ -12,7 +12,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ data }: HeroSectionProps) {
   return (
-    <section className="relative min-h-[60vh] lg:min-h-screen flex items-center justify-center overflow-hidden bg-dark-bg">
+    <section className="relative min-h-[60vh] lg:min-h-screen flex items-center justify-center overflow-hidden bg-gray-100">
       {/* Background image */}
       {data.backgroundImage && (
         <div className="absolute inset-0">
@@ -28,7 +28,7 @@ export function HeroSection({ data }: HeroSectionProps) {
               target.style.display = 'none'
             }}
           />
-          <div className="absolute inset-0 bg-dark-bg/70" />
+          <div className="absolute inset-0 bg-black/45" />
         </div>
       )}
 
@@ -55,7 +55,7 @@ export function HeroSection({ data }: HeroSectionProps) {
           </motion.h1>
 
           <motion.p
-            className="text-lg sm:text-xl text-gray-300 mb-8 leading-relaxed"
+            className="text-lg sm:text-xl text-white/80 mb-8 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -95,7 +95,7 @@ export function HeroSection({ data }: HeroSectionProps) {
         transition={{ delay: 1, duration: 0.5 }}
         aria-hidden="true"
       >
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center pt-2">
+        <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center pt-2">
           <motion.div
             className="w-1.5 h-1.5 bg-white/60 rounded-full"
             animate={{ y: [0, 12, 0] }}

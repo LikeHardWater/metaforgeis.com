@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { LocationCard } from '@/app/components/sections/LocationCard'
 import { CTASection } from '@/app/components/sections/CTASection'
+import { PageHero } from '@/app/components/sections/PageHero'
 import locationsData from '@/src/data/content/locations.json'
 import seoData from '@/src/data/content/seo.json'
 import type { Location, SeoData } from '@/src/types'
@@ -17,20 +18,15 @@ export default function LocationsPage() {
 
   return (
     <>
-      <section className="bg-dark-secondary border-b border-dark-tertiary py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs font-bold uppercase tracking-widest text-gold mb-3 block">Where We Operate</span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
-            Two Regional Locations
-          </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Serving the DFW Metroplex from Flower Mound, TX and the Omaha-Council Bluffs metro from Crescent, IA.
-            One call covers both regions: <a href="tel:8665638247" className="text-gold hover:text-gold-light">(866) 563-8247</a>.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Where We Operate"
+        title="Two Regional Locations"
+        subtitle="Serving DFW from Flower Mound, TX and the Omaha-Council Bluffs metro from Crescent, IA."
+        image="https://metaforgeis.com/wp-content/uploads/2025/07/IMG_4357-1920x1080.jpeg"
+        imageAlt="MetaForge installation team on site"
+      />
 
-      <section className="py-16 sm:py-20 bg-dark-bg">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {locations.map((loc) => (

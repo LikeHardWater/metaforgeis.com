@@ -18,9 +18,9 @@ export function ImageGallery({ images, limit }: ImageGalleryProps) {
 
   if (!images || images.length === 0) {
     return (
-      <div className="text-center py-16 border border-dark-tertiary rounded-lg bg-dark-secondary">
+      <div className="text-center py-16 border border-gray-200 rounded-lg bg-gray-50">
         <ImageOff className="w-12 h-12 text-gray-600 mx-auto mb-4" aria-hidden="true" />
-        <p className="text-gray-400">Gallery images coming soon.</p>
+        <p className="text-gray-500">Gallery images coming soon.</p>
       </div>
     )
   }
@@ -35,12 +35,12 @@ export function ImageGallery({ images, limit }: ImageGalleryProps) {
         {displayImages.map((img, i) => (
           <button
             key={i}
-            className="relative aspect-video bg-dark-tertiary rounded-lg overflow-hidden group cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold"
+            className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden group cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold"
             onClick={() => setLightboxIndex(i)}
             aria-label={`View: ${img.alt}`}
           >
             {errorSet.has(i) ? (
-              <div className="w-full h-full bg-dark-tertiary flex items-center justify-center">
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                 <ImageOff className="w-8 h-8 text-gray-600" aria-hidden="true" />
               </div>
             ) : (
@@ -53,7 +53,7 @@ export function ImageGallery({ images, limit }: ImageGalleryProps) {
                 onError={() => setErrorSet((s) => new Set(s).add(i))}
               />
             )}
-            <div className="absolute inset-0 bg-dark-bg/0 group-hover:bg-dark-bg/30 transition-colors duration-300" aria-hidden="true" />
+            <div className="absolute inset-0 bg-white/0 group-hover:bg-white/30 transition-colors duration-300" aria-hidden="true" />
           </button>
         ))}
       </div>
@@ -67,21 +67,21 @@ export function ImageGallery({ images, limit }: ImageGalleryProps) {
           aria-label="Image lightbox"
         >
           <button
-            className="absolute top-4 right-4 text-white hover:text-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="absolute top-4 right-4 text-gray-900 hover:text-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
             onClick={closeLightbox}
             aria-label="Close lightbox"
           >
             <X className="w-8 h-8" />
           </button>
           <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-900 hover:text-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
             onClick={prev}
             aria-label="Previous image"
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
           <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-900 hover:text-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
             onClick={next}
             aria-label="Next image"
           >
@@ -99,7 +99,7 @@ export function ImageGallery({ images, limit }: ImageGalleryProps) {
             />
           </div>
 
-          <p className="absolute bottom-6 left-0 right-0 text-center text-gray-400 text-sm px-4">
+          <p className="absolute bottom-6 left-0 right-0 text-center text-gray-500 text-sm px-4">
             {images[lightboxIndex].alt} ({lightboxIndex + 1} / {images.length})
           </p>
         </div>

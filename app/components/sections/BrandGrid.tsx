@@ -14,11 +14,11 @@ export function BrandGrid({ data }: BrandGridProps) {
   if (allBrands.length === 0) return null
 
   return (
-    <section className="py-16 sm:py-20 bg-dark-secondary border-y border-dark-tertiary">
+    <section className="py-16 sm:py-20 bg-gray-50 border-y border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">Our Brand Ecosystem</h2>
-          <p className="text-gray-400">
+          <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-3">Our Brand Ecosystem</h2>
+          <p className="text-gray-500">
             We work with the industry&apos;s leading manufacturers — so you get the right equipment, not just what&apos;s on the shelf.
           </p>
         </div>
@@ -32,13 +32,13 @@ export function BrandGrid({ data }: BrandGridProps) {
               {category.brands.map((brand, i) => (
                 <motion.div
                   key={brand}
-                  className="bg-dark-bg border border-dark-tertiary rounded-md px-3 py-3 flex items-center justify-center text-center hover:border-gold/40 transition-colors"
+                  className="bg-white border border-gray-200 rounded-md px-3 py-3 flex items-center justify-center text-center hover:border-gold/40 transition-colors"
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.04, duration: 0.3 }}
                 >
-                  <span className="text-gray-300 text-sm font-medium">{brand}</span>
+                  <span className="text-gray-600 text-sm font-medium">{brand}</span>
                 </motion.div>
               ))}
             </div>

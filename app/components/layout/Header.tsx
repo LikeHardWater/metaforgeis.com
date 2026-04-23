@@ -15,6 +15,8 @@ const navLinks = [
   { label: 'Contact', href: '/contact' },
 ]
 
+const HEADER_HEIGHT = 100
+
 export function Header() {
   const { isVisible: bannerVisible } = useScrollBanner()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -26,7 +28,6 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) setMobileOpen(false)
@@ -40,20 +41,22 @@ export function Header() {
   return (
     <>
       {/* Spacer to prevent content from going under fixed header */}
-      <div style={{ height: `${bannerHeight + 64}px` }} aria-hidden="true" />
+      <div style={{ height: `${bannerHeight + HEADER_HEIGHT}px` }} aria-hidden="true" />
 
       <header
         className={cn(
-          'fixed left-0 right-0 z-40 transition-all duration-300',
-          scrolled ? 'bg-dark-bg/95 backdrop-blur-sm shadow-lg' : 'bg-dark-bg'
+          'fixed left-0 right-0 z-40 transition-all duration-300 border-b',
+          scrolled
+            ? 'bg-white/95 backdrop-blur-sm shadow-md border-gray-200'
+            : 'bg-white border-gray-100'
         )}
         style={{ top: `${bannerHeight}px` }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between" style={{ height: `${HEADER_HEIGHT}px` }}>
             {/* Logo */}
             <Link href="/" className="flex items-center flex-shrink-0" aria-label="MetaForge Industrial Systems Home">
-              <div className="relative w-40 h-10">
+              <div className="relative w-80 h-20">
                 <Image
                   src="/images/MFIS_Logo.svg"
                   alt="MetaForge Industrial Systems"
@@ -61,12 +64,11 @@ export function Header() {
                   className="object-contain object-left"
                   priority
                   onError={(e) => {
-                    // Fallback to text if logo missing
                     const target = e.currentTarget as HTMLImageElement
                     target.style.display = 'none'
                     const parent = target.parentElement
                     if (parent) {
-                      parent.innerHTML = '<span style="color:#dab811;font-weight:700;font-size:14px;line-height:1.2;">MetaForge<br/>Industrial Systems</span>'
+                      parent.innerHTML = '<span style="color:#dab811;font-weight:700;font-size:15px;line-height:1.2;">MetaForge<br/>Industrial Systems</span>'
                     }
                   }}
                 />
@@ -79,7 +81,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white hover:text-gold transition-colors text-sm font-medium py-2"
+                  className="text-gray-700 hover:text-gold transition-colors text-sm font-medium py-2"
                 >
                   {link.label}
                 </Link>
@@ -90,7 +92,7 @@ export function Header() {
             <div className="hidden lg:flex items-center gap-4">
               <a
                 href="tel:8665638247"
-                className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors text-sm font-semibold"
+                className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-semibold"
               >
                 <Phone className="w-4 h-4" aria-hidden="true" />
                 (866) 563-8247
@@ -105,7 +107,7 @@ export function Header() {
 
             {/* Mobile hamburger */}
             <button
-              className="lg:hidden p-2 text-white hover:text-gold transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="lg:hidden p-2 text-gray-700 hover:text-gold transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-expanded={mobileOpen}
               aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
@@ -117,13 +119,13 @@ export function Header() {
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="lg:hidden bg-dark-secondary border-t border-dark-tertiary">
+          <div className="lg:hidden bg-white border-t border-gray-200">
             <nav className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1" aria-label="Mobile navigation">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white hover:text-gold transition-colors py-3 text-base font-medium border-b border-dark-tertiary last:border-0 min-h-[44px] flex items-center"
+                  className="text-gray-700 hover:text-gold transition-colors py-3 text-base font-medium border-b border-gray-100 last:border-0 min-h-[44px] flex items-center"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.label}

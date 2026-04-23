@@ -51,17 +51,17 @@ export default function HomePage() {
       />
 
       {/* About / Mission */}
-      <section className="py-16 sm:py-20 bg-dark-secondary border-y border-dark-tertiary">
+      <section className="py-16 sm:py-20 bg-gray-50 border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-gold mb-3 block">Our Mission</span>
-              <h2 className="text-3xl sm:text-4xl font-black text-white mb-6">Precision Built. Partner Driven.</h2>
-              <p className="text-gray-300 leading-relaxed mb-6">
+              <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-6">Precision Built. Partner Driven.</h2>
+              <p className="text-gray-600 leading-relaxed mb-6">
                 MetaForge Industrial Systems delivers precision-engineered dock equipment, industrial doors, and
                 material handling systems — installed right, serviced fast, and built to last.
               </p>
-              <p className="text-gray-400 leading-relaxed mb-8">
+              <p className="text-gray-500 leading-relaxed mb-8">
                 Founded by operators with over 30 years of industry experience, we hold the line on quality,
                 speed, and accountability in every job. Headquartered in Texas and the Midwest, MetaForge is
                 building the next generation of industrial infrastructure — one system at a time.
@@ -74,7 +74,7 @@ export default function HomePage() {
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
             </div>
-            <div className="relative h-72 sm:h-96 rounded-lg overflow-hidden bg-dark-tertiary">
+            <div className="relative h-72 sm:h-96 rounded-lg overflow-hidden bg-gray-100">
               <SafeImage
                 src="https://metaforgeis.com/wp-content/uploads/2025/07/IMG_2313-1024x768.jpeg"
                 alt="MetaForge installation team at work"
@@ -91,12 +91,12 @@ export default function HomePage() {
       <BrandGrid data={brands} />
 
       {/* Our Work preview */}
-      <section className="py-16 sm:py-20 bg-dark-bg">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-gold mb-2 block">Portfolio</span>
-              <h2 className="text-3xl sm:text-4xl font-black text-white">Our Work</h2>
+              <h2 className="text-3xl sm:text-4xl font-black text-gray-900">Our Work</h2>
             </div>
             <Link
               href="/our-work"
@@ -108,7 +108,7 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {galleryPreview.map((url, i) => (
-              <Link key={i} href="/our-work" className="group relative aspect-video bg-dark-tertiary rounded-lg overflow-hidden block">
+              <Link key={i} href="/our-work" className="group relative aspect-video bg-gray-100 rounded-lg overflow-hidden block">
                 <SafeImage
                   src={url}
                   alt={`MetaForge project work ${i + 1}`}
@@ -116,7 +116,7 @@ export default function HomePage() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
-                <div className="absolute inset-0 bg-dark-bg/0 group-hover:bg-dark-bg/20 transition-colors duration-300" aria-hidden="true" />
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/20 transition-colors duration-300" aria-hidden="true" />
               </Link>
             ))}
           </div>
@@ -126,11 +126,11 @@ export default function HomePage() {
       <TestimonialSection testimonials={testimonials} />
 
       {/* Locations */}
-      <section className="py-16 sm:py-20 bg-dark-secondary border-t border-dark-tertiary">
+      <section className="py-16 sm:py-20 bg-gray-50 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-gold mb-3 block">Where We Operate</span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white">Two Regional Locations</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900">Two Regional Locations</h2>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {locations.map((loc) => (

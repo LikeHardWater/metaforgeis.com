@@ -20,7 +20,7 @@ export function EmergencyBanner() {
         >
           <a
             href="tel:8336382767"
-            className="flex items-center justify-center w-full bg-emergency text-white font-bold py-2 px-4 cursor-pointer hover:bg-orange-700 transition-colors"
+            className="flex items-center justify-center w-full bg-emergency text-gray-900 font-bold py-2 px-4 cursor-pointer hover:bg-orange-700 transition-colors"
             aria-label="Emergency Line: Call 833-META-SOS"
           >
             <Phone className="w-4 h-4 mr-2 flex-shrink-0" aria-hidden="true" />
