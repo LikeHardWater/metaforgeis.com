@@ -47,7 +47,7 @@ export default function QuoteQuestionPage() {
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-black text-slate-900">Ask a Question</h1>
-        <p className="text-slate-500 mt-1">Have a question about this quote? Send it to our team and we'll get back to you promptly.</p>
+        <p className="text-slate-500 mt-1">Have a question about this quote? Send it to our team and we&apos;ll get back to you promptly.</p>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-xl p-6">
