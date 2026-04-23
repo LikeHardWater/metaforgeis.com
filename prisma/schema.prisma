@@ -1,0 +1,630 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Roles ────────────────────────────────────────────────────────────────────
+
+enum SystemRole {
+  OWNER
+  ESTIMATOR
+  SALES_ASSOCIATE
+  FIELD_SERVICE_MANAGER
+  FIELD_SERVICE_EMPLOYEE
+  ADMINISTRATOR
+}
+
+enum RecordScope {
+  OWN
+  TEAM
+  TERRITORY
+  ALL
+}
+
+model Role {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  systemRole  SystemRole?
+  isCustom    Boolean     @default(false)
+  description String?
+
+  permissions RolePermission[]
+  users       User[]
+
+  sessionTimeoutMinutes Int @default(480)
+  maxFailedLogins       Int @default(5)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RolePermission {
+  id      String @id @default(cuid())
+  role    Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId  String
+
+  module      String
+  canRead     Boolean     @default(false)
+  canWrite    Boolean     @default(false)
+  canDelete   Boolean     @default(false)
+  recordScope RecordScope @default(OWN)
+
+  fieldOverrides Json?
+
+  @@unique([roleId, module])
+}
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?
+  image         String?
+
+  role          Role      @relation(fields: [roleId], references: [id])
+  roleId        String
+
+  mfaEnabled    Boolean   @default(false)
+  mfaSecret     String?
+  mfaBackupCodes String[]
+
+  microsoftId   String?   @unique
+  microsoftTenantId String?
+
+  isActive      Boolean   @default(true)
+  failedLoginCount Int    @default(0)
+  lockedAt      DateTime?
+  lockedByAdmin Boolean   @default(false)
+
+  lastLoginAt   DateTime?
+  lastLoginIp   String?
+
+  accounts      Account[]
+  sessions      Session[]
+  auditLogs     AuditLog[]
+
+  crmAccounts   CrmAccount[]  @relation("CrmAccountOwner")
+  crmContacts   CrmContact[]  @relation("CrmContactOwner")
+  crmLeads      CrmLead[]     @relation("CrmLeadOwner")
+  crmDeals      CrmDeal[]     @relation("CrmDealOwner")
+  crmTasks      CrmTask[]     @relation("CrmTaskOwner")
+  assignedTasks CrmTask[]     @relation("CrmTaskAssignee")
+  crmActivities CrmActivity[] @relation("CrmActivityUser")
+  quotes        Quote[]       @relation("QuoteOwner")
+  attachments   Attachment[]  @relation("AttachmentUploader")
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// ─── Auth.js v5 tables ────────────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── CRM Enums ────────────────────────────────────────────────────────────────
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  UNQUALIFIED
+  CONVERTED
+}
+
+enum LeadSource {
+  WEB_FORM
+  REFERRAL
+  COLD_CALL
+  TRADE_SHOW
+  EMAIL_CAMPAIGN
+  SOCIAL_MEDIA
+  OTHER
+}
+
+enum DealStatus {
+  OPEN
+  WON
+  LOST
+}
+
+enum ActivityType {
+  NOTE
+  EMAIL
+  CALL
+  MEETING
+  SMS
+  TASK_COMPLETED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskType {
+  CALL
+  EMAIL
+  MEETING
+  FOLLOW_UP
+  OTHER
+}
+
+enum AccountType {
+  PROSPECT
+  CUSTOMER
+  VENDOR
+  PARTNER
+}
+
+enum QuoteStage {
+  DRAFT
+  SENT
+  ACCEPTED
+  DECLINED
+  REVISED
+  EXPIRED
+}
+
+enum QuoteEventType {
+  SENT
+  QUESTION
+  REPLY
+  ACCEPTED
+}
+
+// ─── CRM Models ───────────────────────────────────────────────────────────────
+
+model CrmAccount {
+  id          String      @id @default(cuid())
+  name        String
+  type        AccountType @default(PROSPECT)
+  industry    String?
+  website     String?
+  phone       String?
+  fax         String?
+  email       String?
+  description String?
+  twitterHandle String?
+  annualRevenue Decimal?  @db.Decimal(14, 2)
+  employeeCount Int?
+
+  // Primary / billing address
+  addressLine1  String?
+  addressLine2  String?
+  city          String?
+  state         String?
+  zip           String?
+  country       String?
+
+  // Shipping address
+  shippingStreet  String?
+  shippingCity    String?
+  shippingState   String?
+  shippingZip     String?
+  shippingCountry String?
+
+  notes       String?
+
+  owner       User        @relation("CrmAccountOwner", fields: [ownerId], references: [id])
+  ownerId     String
+
+  contacts      CrmContact[]
+  deals         CrmDeal[]
+  activities    CrmActivity[]
+  convertedLeads CrmLead[]   @relation("CrmLeadConvertedAccount")
+  quotes        Quote[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model CrmContact {
+  id            String      @id @default(cuid())
+  firstName     String
+  lastName      String
+  email         String?
+  secondaryEmail String?
+  phone         String?
+  mobile        String?
+  otherPhone    String?
+  homePhone     String?
+  fax           String?
+  title         String?
+  department    String?
+  assistantName String?
+  twitterHandle String?
+  skypeId       String?
+  notes         String?
+
+  // Mailing address
+  mailingStreet  String?
+  mailingCity    String?
+  mailingState   String?
+  mailingZip     String?
+  mailingCountry String?
+
+  // Other address
+  otherStreet    String?
+  otherCity      String?
+  otherState     String?
+  otherZip       String?
+  otherCountry   String?
+
+  account     CrmAccount? @relation(fields: [accountId], references: [id])
+  accountId   String?
+
+  owner       User        @relation("CrmContactOwner", fields: [ownerId], references: [id])
+  ownerId     String
+
+  convertedLeads CrmLead[]
+  deals          CrmDeal[]
+  activities     CrmActivity[]
+  quotes         Quote[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model CrmLead {
+  id            String      @id @default(cuid())
+  firstName     String
+  lastName      String
+  email         String?
+  secondaryEmail String?
+  phone         String?
+  mobile        String?
+  fax           String?
+  company       String?
+  title         String?
+  industry      String?
+  website       String?
+  twitterHandle String?
+  skypeId       String?
+  source        LeadSource  @default(OTHER)
+  status        LeadStatus  @default(NEW)
+  rating        String?
+  score         Int         @default(0)
+  emailOptOut   Boolean     @default(false)
+  annualRevenue Decimal?    @db.Decimal(14, 2)
+  notes         String?
+
+  // Address
+  addressLine1  String?
+  city          String?
+  state         String?
+  zip           String?
+  country       String?
+
+  owner       User        @relation("CrmLeadOwner", fields: [ownerId], references: [id])
+  ownerId     String
+
+  convertedAt           DateTime?
+  convertedToContact    CrmContact? @relation(fields: [convertedToContactId], references: [id])
+  convertedToContactId  String?
+  convertedToAccount    CrmAccount? @relation("CrmLeadConvertedAccount", fields: [convertedToAccountId], references: [id])
+  convertedToAccountId  String?
+  convertedToDeal       CrmDeal?    @relation(fields: [convertedToDealId], references: [id])
+  convertedToDealId     String?
+
+  activities  CrmActivity[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Pipeline {
+  id          String          @id @default(cuid())
+  name        String
+  isDefault   Boolean         @default(false)
+  stages      PipelineStage[]
+  deals       CrmDeal[]
+
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model PipelineStage {
+  id              String    @id @default(cuid())
+  name            String
+  order           Int
+  probability     Int       @default(50)
+
+  pipeline        Pipeline  @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  pipelineId      String
+
+  deals           CrmDeal[]
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([pipelineId, order])
+}
+
+model CrmDeal {
+  id              String        @id @default(cuid())
+  name            String
+  value           Decimal?      @db.Decimal(12, 2)
+  probability     Int?
+  expectedCloseDate DateTime?
+  status          DealStatus    @default(OPEN)
+  lostReason      String?
+  notes           String?
+
+  pipeline        Pipeline      @relation(fields: [pipelineId], references: [id])
+  pipelineId      String
+
+  stage           PipelineStage @relation(fields: [stageId], references: [id])
+  stageId         String
+
+  account         CrmAccount?   @relation(fields: [accountId], references: [id])
+  accountId       String?
+
+  contact         CrmContact?   @relation(fields: [contactId], references: [id])
+  contactId       String?
+
+  owner           User          @relation("CrmDealOwner", fields: [ownerId], references: [id])
+  ownerId         String
+
+  convertedLeads  CrmLead[]
+  activities      CrmActivity[]
+  quotes          Quote[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model CrmTask {
+  id          String        @id @default(cuid())
+  title       String
+  description String?
+  dueDate     DateTime?
+  completedAt DateTime?
+  priority    TaskPriority  @default(MEDIUM)
+  type        TaskType      @default(FOLLOW_UP)
+
+  owner       User          @relation("CrmTaskOwner", fields: [ownerId], references: [id])
+  ownerId     String
+
+  assignee    User?         @relation("CrmTaskAssignee", fields: [assigneeId], references: [id])
+  assigneeId  String?
+
+  relatedToType String?
+  relatedToId   String?
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model CrmActivity {
+  id          String        @id @default(cuid())
+  type        ActivityType
+  content     String
+
+  user        User          @relation("CrmActivityUser", fields: [userId], references: [id])
+  userId      String
+
+  account     CrmAccount?   @relation(fields: [accountId], references: [id])
+  accountId   String?
+
+  contact     CrmContact?   @relation(fields: [contactId], references: [id])
+  contactId   String?
+
+  lead        CrmLead?      @relation(fields: [leadId], references: [id])
+  leadId      String?
+
+  deal        CrmDeal?      @relation(fields: [dealId], references: [id])
+  dealId      String?
+
+  createdAt   DateTime      @default(now())
+}
+
+// ─── Products & Catalog ───────────────────────────────────────────────────────
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  sku         String?  @unique
+  unitPrice   Decimal  @db.Decimal(12, 2)
+  productType String   @default("PRODUCT") // "PRODUCT" | "SERVICE"
+  taxable     Boolean  @default(true)
+  category    String?
+  isActive    Boolean  @default(true)
+
+  lineItems   QuoteLineItem[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model StateTaxRate {
+  id             String  @id @default(cuid())
+  stateCode      String  @unique
+  stateName      String
+  taxRate        Decimal @db.Decimal(6, 4)
+  taxesServices  Boolean @default(false)
+}
+
+// ─── Quotes ───────────────────────────────────────────────────────────────────
+
+model Quote {
+  id          String     @id @default(cuid())
+  quoteNumber String     @unique
+  subject     String
+  stage       QuoteStage @default(DRAFT)
+  validUntil  DateTime?
+
+  account     CrmAccount? @relation(fields: [accountId], references: [id])
+  accountId   String?
+
+  contact     CrmContact? @relation(fields: [contactId], references: [id])
+  contactId   String?
+
+  deal        CrmDeal?    @relation(fields: [dealId], references: [id])
+  dealId      String?
+
+  owner       User        @relation("QuoteOwner", fields: [ownerId], references: [id])
+  ownerId     String
+
+  // Billing address
+  billingStreet  String?
+  billingCity    String?
+  billingState   String?
+  billingZip     String?
+  billingCountry String?
+
+  // Shipping / service address (used for tax lookup)
+  shippingStreet  String?
+  shippingCity    String?
+  shippingState   String?
+  shippingZip     String?
+  shippingCountry String?
+
+  // Financials (computed and stored on save)
+  subTotal       Decimal @db.Decimal(12, 2) @default(0)
+  discountAmount Decimal @db.Decimal(12, 2) @default(0)
+  taxAmount      Decimal @db.Decimal(12, 2) @default(0)
+  grandTotal     Decimal @db.Decimal(12, 2) @default(0)
+
+  terms String?
+  notes String?
+
+  publicToken String? @unique @default(cuid())
+  revision    Int     @default(1)
+
+  lineItems QuoteLineItem[]
+  events    QuoteEvent[]
+  versions  QuoteVersion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QuoteVersion {
+  id        String   @id @default(cuid())
+  quoteId   String
+  quote     Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  revision  Int
+  snapshot  Json
+  savedBy   String?
+  createdAt DateTime @default(now())
+}
+
+model QuoteEvent {
+  id          String         @id @default(cuid())
+  quoteId     String
+  quote       Quote          @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  type        QuoteEventType
+  authorName  String?
+  authorEmail String?
+  content     String?        @db.Text
+  ipAddress   String?
+  createdAt   DateTime       @default(now())
+}
+
+model QuoteLineItem {
+  id        String  @id @default(cuid())
+
+  quote     Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  quoteId   String
+
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+
+  description String
+  quantity    Decimal @db.Decimal(10, 2) @default(1)
+  unitPrice   Decimal @db.Decimal(12, 2)
+  discount    Decimal @db.Decimal(12, 2) @default(0)
+  taxRate     Decimal @db.Decimal(6, 4)  @default(0)
+  lineTotal   Decimal @db.Decimal(12, 2)
+
+  sortOrder Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Attachments ──────────────────────────────────────────────────────────────
+
+model Attachment {
+  id         String @id @default(cuid())
+  entityType String
+  entityId   String
+
+  filename   String
+  s3Key      String
+  mimeType   String?
+  sizeBytes  Int?
+
+  uploadedBy   User   @relation("AttachmentUploader", fields: [uploadedById], references: [id])
+  uploadedById String
+
+  createdAt DateTime @default(now())
+
+  @@index([entityType, entityId])
+}
+
+// ─── Audit Log ────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userEmail  String?
+  userRole   String?
+
+  action     String
+  entity     String?
+  entityId   String?
+
+  before     Json?
+  after      Json?
+
+  ipAddress  String?
+  userAgent  String?
+  metadata   Json?
+}
