@@ -8,6 +8,7 @@ const { auth } = NextAuth({
   providers: [MicrosoftEntraID, Credentials],
   session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET,
+  trustHost: true,
 });
 
 const PUBLIC_PATHS = [
