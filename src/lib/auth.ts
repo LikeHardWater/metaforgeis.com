@@ -39,9 +39,27 @@ declare module "next-auth" {
   }
 }
 
+// PrismaAdapter.createUser only sends standard NextAuth fields (email, name, image).
+// Our User model requires roleId, so we override createUser to inject a default role.
+const adapter = {
+  ...PrismaAdapter(prisma),
+  async createUser(user: { email: string; name?: string | null; image?: string | null; emailVerified: Date | null }) {
+    const defaultRole = await prisma.role.findFirst({ orderBy: { createdAt: 'asc' } });
+    if (!defaultRole) throw new Error('No roles configured — add at least one role in admin settings');
+    return prisma.user.create({
+      data: {
+        email: user.email,
+        name: user.name ?? null,
+        image: user.image ?? null,
+        roleId: defaultRole.id,
+      },
+    });
+  },
+};
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
-  adapter: PrismaAdapter(prisma),
+  adapter,
 
   providers: [
     MicrosoftEntraID({
