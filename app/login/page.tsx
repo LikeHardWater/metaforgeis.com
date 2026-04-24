@@ -4,6 +4,6 @@ import LoginForm from './LoginForm'
 
 export default async function LoginPage() {
   const session = await auth()
-  if (session) redirect('/app/dashboard')
+  if (session?.user?.id) redirect('/app/dashboard')
   return <LoginForm />
 }
