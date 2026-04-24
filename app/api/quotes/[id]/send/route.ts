@@ -17,7 +17,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     include: {
       lineItems: { orderBy: { sortOrder: 'asc' } },
       account: { select: { name: true } },
-      contact: { select: { firstName: true, lastName: true } },
+      contact: { select: { firstName: true, lastName: true, email: true } },
       owner: { select: { name: true, email: true } },
     },
   })
@@ -33,15 +33,19 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const baseUrl = process.env.METAFORGE_BASE_URL ?? 'https://metaforgeis.com'
   const fmt = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 2 })
 
-  const lineItemRows = quote.lineItems.map((li: { description: string; quantity: unknown; unitPrice: unknown; discount: unknown; taxRate: unknown; lineTotal: unknown }) => `
+  const lineItemRows = quote.lineItems.map((li: { description: string; quantity: unknown; unitPrice: unknown; discount: unknown; taxRate: unknown; lineTotal: unknown }) => {
+    const base = Math.max(0, Number(li.quantity) * Number(li.unitPrice) - Number(li.discount))
+    const taxAmt = base * Number(li.taxRate) / 100
+    return `
     <tr>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">${li.description}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">${Number(li.quantity)}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">$${fmt(Number(li.unitPrice))}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">$${fmt(Number(li.discount))}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">${Number(li.taxRate)}%</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">$${fmt(taxAmt)}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:600;">$${fmt(Number(li.lineTotal))}</td>
-    </tr>`).join('')
+    </tr>`
+  }).join('')
 
   const htmlBody = `
 <!DOCTYPE html>
@@ -73,7 +77,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Qty</th>
         <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Unit Price</th>
         <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Discount</th>
-        <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Tax</th>
+        <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Tax ($)</th>
         <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Total</th>
       </tr>
     </thead>
@@ -113,13 +117,41 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 </body>
 </html>`
 
+  async function sendWithFallback(primaryUserId: string, opts: Omit<Parameters<typeof sendEmailAsUser>[0], 'userId'>) {
+    try {
+      await sendEmailAsUser({ ...opts, userId: primaryUserId })
+    } catch {
+      const any = await prisma.account.findFirst({ where: { provider: 'microsoft-entra-id' }, select: { userId: true } })
+      if (any && any.userId !== primaryUserId) {
+        await sendEmailAsUser({ ...opts, userId: any.userId })
+      } else {
+        throw new Error('No Microsoft account available to send email. Please sign in with Microsoft SSO.')
+      }
+    }
+  }
+
   try {
-    await sendEmailAsUser({
-      userId: session.user.id,
+    await sendWithFallback(session.user.id, {
       to: [toEmail],
       subject: `Quote ${quote.quoteNumber}: ${quote.subject}`,
       htmlBody,
     })
+
+    // If quote is linked to a deal, advance the deal to "Proposal Sent" stage
+    if (quote.dealId) {
+      const deal = await prisma.crmDeal.findUnique({
+        where: { id: quote.dealId },
+        include: { pipeline: { include: { stages: { orderBy: { order: 'asc' } } } }, stage: true },
+      })
+      if (deal) {
+        const proposalStage = deal.pipeline.stages.find((s) =>
+          s.name.toLowerCase().includes('proposal') || s.name.toLowerCase().includes('sent')
+        )
+        if (proposalStage && proposalStage.order > deal.stage.order) {
+          await prisma.crmDeal.update({ where: { id: deal.id }, data: { stageId: proposalStage.id } })
+        }
+      }
+    }
 
     await prisma.$transaction([
       prisma.quote.update({

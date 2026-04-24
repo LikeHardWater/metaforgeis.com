@@ -2,8 +2,10 @@ import { auth } from '@/src/lib/auth'
 import { prisma } from '@/src/lib/prisma'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { addActivity, updateDeal } from '@/src/lib/actions/crm'
-import { ActivityType, DealStatus } from '@prisma/client'
+import { updateDeal } from '@/src/lib/actions/crm'
+import { DealStatus } from '@prisma/client'
+import { ActivityForm } from '@/app/components/crm/ActivityForm'
+import { FileText } from 'lucide-react'
 
 const STATUS_COLORS: Record<DealStatus, string> = {
   OPEN: 'text-blue-700 bg-blue-100 border-blue-200',
@@ -39,9 +41,17 @@ export default async function DealDetailPage({ params }: { params: { id: string 
     <div className="max-w-7xl mx-auto px-6 py-8">
       <div className="mb-6">
         <Link href="/app/crm/deals" className="text-gray-500 hover:text-slate-600 text-sm">← Opportunities</Link>
-        <div className="flex items-center gap-3 mt-2">
-          <h1 className="text-2xl font-black tracking-tight">{deal.name}</h1>
-          <span className={`text-xs border rounded px-2 py-0.5 ${STATUS_COLORS[deal.status]}`}>{deal.status}</span>
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-black tracking-tight">{deal.name}</h1>
+            <span className={`text-xs border rounded px-2 py-0.5 ${STATUS_COLORS[deal.status]}`}>{deal.status}</span>
+          </div>
+          <Link
+            href={`/app/crm/quotes/new?dealId=${deal.id}${deal.accountId ? `&accountId=${deal.accountId}` : ''}${deal.contactId ? `&contactId=${deal.contactId}` : ''}`}
+            className="flex items-center gap-2 bg-gold hover:bg-gold-dark text-dark-bg font-bold text-sm px-4 py-2.5 rounded-lg transition-colors"
+          >
+            <FileText className="w-4 h-4" /> Create Quote
+          </Link>
         </div>
         {deal.value && <p className="text-gold font-bold text-lg mt-1">${Number(deal.value).toLocaleString()}</p>}
       </div>
@@ -129,14 +139,7 @@ export default async function DealDetailPage({ params }: { params: { id: string 
           {/* Activity */}
           <div className="bg-white border border-slate-200 rounded-xl p-6">
             <h2 className="text-slate-500 text-xs uppercase tracking-wider mb-4">Activity</h2>
-            <form action={addActivity} className="flex gap-2 mb-5">
-              <input type="hidden" name="dealId" value={deal.id} />
-              <input type="hidden" name="entityType" value="deals" />
-              <input type="hidden" name="entityId" value={deal.id} />
-              <input type="hidden" name="type" value={ActivityType.NOTE} />
-              <input name="content" placeholder="Add a note..." className="flex-1 bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2 text-slate-900 text-sm placeholder-slate-400 focus:outline-none" />
-              <button type="submit" className="bg-slate-100 border border-slate-200 hover:border-gold text-slate-600 hover:text-slate-900 text-sm px-4 py-2 rounded-lg transition-colors">Add Note</button>
-            </form>
+            <ActivityForm entityType="deals" entityId={deal.id} dealId={deal.id} />
             <div className="space-y-3">
               {deal.activities.map((a) => (
                 <div key={a.id} className="text-sm">

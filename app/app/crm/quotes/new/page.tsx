@@ -5,9 +5,13 @@ import Link from 'next/link'
 import { createQuote } from '@/src/lib/actions/quotes'
 import { QuoteAddressFields } from '@/app/components/crm/QuoteAddressFields'
 
-export default async function NewQuotePage() {
+export default async function NewQuotePage({ searchParams }: { searchParams: { dealId?: string; accountId?: string; contactId?: string } }) {
   const session = await auth()
   if (!session) redirect('/login')
+
+  const thirtyDaysOut = new Date()
+  thirtyDaysOut.setDate(thirtyDaysOut.getDate() + 30)
+  const defaultValidUntil = thirtyDaysOut.toISOString().split('T')[0]
 
   const [accounts, contacts, deals, stateTaxes] = await Promise.all([
     prisma.crmAccount.findMany({ orderBy: { name: 'asc' }, select: { id: true, name: true } }),
@@ -30,26 +34,26 @@ export default async function NewQuotePage() {
           <h2 className="text-slate-500 text-xs uppercase tracking-wider">Quote Information</h2>
           <Field label="Subject *" name="subject" required />
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Valid Until" name="validUntil" type="date" />
+            <Field label="Valid Until" name="validUntil" type="date" defaultValue={defaultValidUntil} />
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-1.5">Account</label>
-              <select name="accountId" className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2.5 text-slate-900 text-sm focus:outline-none">
+              <select name="accountId" defaultValue={searchParams.accountId ?? ''} className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2.5 text-slate-900 text-sm focus:outline-none">
                 <option value="">— None —</option>
                 {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-1.5">Contact</label>
-              <select name="contactId" className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2.5 text-slate-900 text-sm focus:outline-none">
+              <select name="contactId" defaultValue={searchParams.contactId ?? ''} className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2.5 text-slate-900 text-sm focus:outline-none">
                 <option value="">— None —</option>
                 {contacts.map((c) => <option key={c.id} value={c.id}>{c.firstName} {c.lastName}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-1.5">Opportunity</label>
-              <select name="dealId" className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2.5 text-slate-900 text-sm focus:outline-none">
+              <select name="dealId" defaultValue={searchParams.dealId ?? ''} className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2.5 text-slate-900 text-sm focus:outline-none">
                 <option value="">— None —</option>
                 {deals.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
               </select>
@@ -82,11 +86,11 @@ export default async function NewQuotePage() {
   )
 }
 
-function Field({ label, name, type = 'text', required }: { label: string; name: string; type?: string; required?: boolean }) {
+function Field({ label, name, type = 'text', required, defaultValue }: { label: string; name: string; type?: string; required?: boolean; defaultValue?: string }) {
   return (
     <div>
       <label className="block text-sm font-medium text-slate-600 mb-1.5">{label}</label>
-      <input type={type} name={name} required={required} className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2.5 text-slate-900 text-sm focus:outline-none" />
+      <input type={type} name={name} required={required} defaultValue={defaultValue} className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-4 py-2.5 text-slate-900 text-sm focus:outline-none" />
     </div>
   )
 }

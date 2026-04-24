@@ -28,6 +28,7 @@ type LineItem = {
   unitPrice: number
   discount: number
   taxRate: number
+  taxStateCode: string  // display-only; tracks which state's rate is shown
   lineTotal: number
   sortOrder: number
 }
@@ -52,7 +53,12 @@ function calcLineTotal(qty: number, price: number, discount: number, taxRate: nu
 export function QuoteLineItemBuilder({ quoteId, products, stateTaxes, defaultTaxRate, shippingStateCode, initialItems }: Props) {
   const [items, setItems] = useState<LineItem[]>(
     initialItems.length > 0
-      ? initialItems.map((i) => ({ ...i, _key: newKey() }))
+      ? initialItems.map((i) => ({
+          ...i,
+          _key: newKey(),
+          // Resolve taxStateCode from stored rate if not already set
+          taxStateCode: i.taxStateCode || stateTaxes.find((t) => t.taxRate === i.taxRate)?.stateCode || '',
+        }))
       : []
   )
   const [pending, startTransition] = useTransition()
@@ -68,7 +74,18 @@ export function QuoteLineItemBuilder({ quoteId, products, stateTaxes, defaultTax
   const addItem = () => {
     setItems((prev) => [
       ...prev,
-      { _key: newKey(), productId: '', description: '', quantity: 1, unitPrice: 0, discount: 0, taxRate: defaultTaxRate, lineTotal: 0, sortOrder: prev.length },
+      {
+        _key: newKey(),
+        productId: '',
+        description: '',
+        quantity: 1,
+        unitPrice: 0,
+        discount: 0,
+        taxRate: defaultTaxRate,
+        taxStateCode: shippingStateCode,
+        lineTotal: 0,
+        sortOrder: prev.length,
+      },
     ])
   }
 
@@ -85,18 +102,31 @@ export function QuoteLineItemBuilder({ quoteId, products, stateTaxes, defaultTax
     )
   }
 
+  const handleTaxStateChange = (key: string, stateCode: string) => {
+    if (stateCode === '') {
+      updateItem(key, { taxStateCode: '', taxRate: 0 })
+    } else {
+      const state = stateTaxes.find((t) => t.stateCode === stateCode)
+      updateItem(key, { taxStateCode: stateCode, taxRate: state?.taxRate ?? 0 })
+    }
+  }
+
   const selectProduct = (key: string, productId: string) => {
     const product = products.find((p) => p.id === productId)
-    if (!product) { updateItem(key, { productId: '', description: '' }); return }
+    if (!product) { updateItem(key, { productId: '', description: '', taxStateCode: shippingStateCode, taxRate: defaultTaxRate }); return }
 
-    // Determine tax rate: services use 0 if the shipping state doesn't tax services
     let taxRate = 0
+    let taxStateCode = shippingStateCode
     if (product.taxable) {
       if (product.productType === 'SERVICE') {
         taxRate = shippingState?.taxesServices ? defaultTaxRate : 0
+        taxStateCode = shippingState?.taxesServices ? shippingStateCode : ''
       } else {
         taxRate = defaultTaxRate
+        taxStateCode = shippingStateCode
       }
+    } else {
+      taxStateCode = ''
     }
 
     updateItem(key, {
@@ -104,14 +134,16 @@ export function QuoteLineItemBuilder({ quoteId, products, stateTaxes, defaultTax
       description: '',
       unitPrice: product.unitPrice,
       taxRate,
+      taxStateCode,
     })
   }
 
   const handleSave = () => {
     setSaved(false)
     startTransition(async () => {
+      // Strip _key and taxStateCode (client-only display fields) before saving
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      await saveQuoteLineItems(quoteId, JSON.stringify(items.map(({ _key, ...rest }) => rest)))
+      await saveQuoteLineItems(quoteId, JSON.stringify(items.map(({ _key, taxStateCode, ...rest }) => rest)))
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
     })
@@ -173,7 +205,6 @@ export function QuoteLineItemBuilder({ quoteId, products, stateTaxes, defaultTax
                         ))}
                       </optgroup>
                     </select>
-                    {/* Show description field only when no catalog item selected, or as notes override */}
                     {!item.productId && (
                       <input
                         value={item.description}
@@ -204,12 +235,13 @@ export function QuoteLineItemBuilder({ quoteId, products, stateTaxes, defaultTax
                       className="w-full text-xs text-right bg-slate-100 border border-slate-200 focus:border-gold rounded px-2 py-1.5 focus:outline-none" />
                   </td>
                   <td className="px-3 py-2">
-                    <select value={item.taxRate}
-                      onChange={(e) => updateItem(item._key, { taxRate: parseFloat(e.target.value) })}
+                    {/* Use stateCode as value to avoid collision when multiple states share same rate */}
+                    <select value={item.taxStateCode}
+                      onChange={(e) => handleTaxStateChange(item._key, e.target.value)}
                       className="w-full text-xs bg-slate-100 border border-slate-200 focus:border-gold rounded px-2 py-1.5 focus:outline-none">
-                      <option value={0}>0% (exempt)</option>
+                      <option value="">0% (exempt)</option>
                       {stateTaxes.map((t) => (
-                        <option key={t.stateCode} value={t.taxRate}>
+                        <option key={t.stateCode} value={t.stateCode}>
                           {t.stateCode} – {Number(t.taxRate)}%
                         </option>
                       ))}

@@ -31,6 +31,11 @@ export default async function LeadsPage({
   const session = await auth()
   if (!session) redirect('/login')
 
+  // Default: exclude CONVERTED unless a specific status is selected
+  const statusFilter = searchParams.status
+    ? { status: searchParams.status as LeadStatus }
+    : { status: { not: LeadStatus.CONVERTED } }
+
   const where = {
     ...(searchParams.q
       ? {
@@ -42,7 +47,7 @@ export default async function LeadsPage({
           ],
         }
       : {}),
-    ...(searchParams.status ? { status: searchParams.status as LeadStatus } : {}),
+    ...statusFilter,
   }
 
   const leads = await prisma.crmLead.findMany({

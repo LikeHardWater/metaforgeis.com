@@ -30,15 +30,14 @@ export function QuoteHistory({ quoteId, events: initialEvents }: Props) {
   const [events, setEvents] = useState(initialEvents)
   const [replyTarget, setReplyTarget] = useState<{ email: string } | null>(null)
 
-  const handleReplySent = () => {
+  const handleReplySent = (replyText: string) => {
     setReplyTarget(null)
-    // Optimistically add a reply event placeholder — page will refresh on next visit with real data
     setEvents((prev) => [...prev, {
       id: `temp_${Date.now()}`,
       type: 'REPLY',
       authorName: 'You',
       authorEmail: null,
-      content: 'Reply sent',
+      content: replyText,
       ipAddress: null,
       createdAt: new Date(),
     }])

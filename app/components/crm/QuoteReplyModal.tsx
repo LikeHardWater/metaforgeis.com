@@ -7,7 +7,7 @@ interface Props {
   quoteId: string
   toEmail: string
   onClose: () => void
-  onSent: () => void
+  onSent: (replyText: string) => void
 }
 
 export function QuoteReplyModal({ quoteId, toEmail, onClose, onSent }: Props) {
@@ -28,7 +28,7 @@ export function QuoteReplyModal({ quoteId, toEmail, onClose, onSent }: Props) {
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error ?? 'Failed to send reply'); return }
-      onSent()
+      onSent(replyText)
     } catch {
       setError('Network error. Please try again.')
     } finally {

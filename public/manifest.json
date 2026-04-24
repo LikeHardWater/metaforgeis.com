@@ -1,0 +1,19 @@
+{
+  "name": "MetaForge Platform",
+  "short_name": "MetaForge",
+  "description": "MetaForge Industrial Systems CRM & Quoting Platform",
+  "start_url": "/app/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dab811",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/MFIS_Logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"]
+}

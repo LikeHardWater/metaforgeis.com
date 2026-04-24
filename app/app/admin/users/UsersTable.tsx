@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { Loader2, Lock, Unlock, UserCheck, UserX, ShieldCheck, Plus, X } from 'lucide-react'
-import { assignRole, toggleUserActive, unlockUser, createUser } from '@/src/lib/actions/users'
+import { Loader2, Lock, Unlock, UserCheck, UserX, ShieldCheck, Plus, X, KeyRound } from 'lucide-react'
+import { assignRole, toggleUserActive, unlockUser, createUser, setUserPassword } from '@/src/lib/actions/users'
 
 type Role = { id: string; name: string; systemRole: string | null }
 type User = {
@@ -127,8 +127,17 @@ function InviteUserForm({ roles, onClose }: { roles: Role[]; onClose: () => void
             {roles.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
           </select>
         </div>
+        <div>
+          <label className="block text-xs font-medium text-slate-500 mb-1.5">Password <span className="text-slate-400">(optional — required for credentials login)</span></label>
+          <input
+            name="password"
+            type="password"
+            placeholder="Min 8 characters"
+            className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-3 py-2 text-slate-900 text-sm focus:outline-none"
+          />
+        </div>
         {error && <p className="text-red-600 text-xs">{error}</p>}
-        <p className="text-slate-500 text-xs">The user will be able to sign in via Microsoft SSO using this email address.</p>
+        <p className="text-slate-500 text-xs">Users can sign in via Microsoft SSO or with email + password if a password is set.</p>
         <div className="flex gap-3">
           <button
             type="submit"
@@ -145,9 +154,64 @@ function InviteUserForm({ roles, onClose }: { roles: Role[]; onClose: () => void
   )
 }
 
+function SetPasswordModal({ userId, onClose }: { userId: string; onClose: () => void }) {
+  const [password, setPassword] = useState('')
+  const [pending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const [done, setDone] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    startTransition(async () => {
+      try {
+        await setUserPassword(userId, password)
+        setDone(true)
+        setTimeout(onClose, 1200)
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : 'Failed to set password')
+      }
+    })
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-sm p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-slate-900">Set Password</h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X className="w-4 h-4" /></button>
+        </div>
+        {done ? (
+          <p className="text-green-600 text-sm font-medium">Password set successfully.</p>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="New password (min 8 chars)"
+              required
+              minLength={8}
+              className="w-full bg-slate-100 border border-slate-200 focus:border-gold rounded-lg px-3 py-2 text-sm focus:outline-none"
+            />
+            {error && <p className="text-red-600 text-xs">{error}</p>}
+            <div className="flex gap-2">
+              <button type="submit" disabled={pending || password.length < 8} className="flex-1 bg-gold hover:bg-gold-dark disabled:opacity-50 text-dark-bg font-bold text-sm py-2 rounded-lg transition-colors">
+                {pending ? <Loader2 className="w-3.5 h-3.5 animate-spin mx-auto" /> : 'Set Password'}
+              </button>
+              <button type="button" onClick={onClose} className="px-4 py-2 text-sm bg-slate-100 text-slate-600 rounded-lg">Cancel</button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function UserRow({ user, roles, isSelf }: { user: User; roles: Role[]; isSelf: boolean }) {
   const [pending, startTransition] = useTransition()
   const [roleId, setRoleId] = useState(user.role.id)
+  const [showSetPassword, setShowSetPassword] = useState(false)
 
   const handleRoleChange = (newRoleId: string) => {
     setRoleId(newRoleId)
@@ -248,6 +312,13 @@ function UserRow({ user, roles, isSelf }: { user: User; roles: Role[]; isSelf: b
               <Unlock className="w-3 h-3" /> Unlock
             </button>
           )}
+          <button
+            onClick={() => setShowSetPassword(true)}
+            disabled={pending}
+            className="text-xs text-slate-500 hover:text-slate-900 disabled:opacity-50 flex items-center gap-1"
+          >
+            <KeyRound className="w-3 h-3" /> Set Password
+          </button>
           {!isSelf && (
             <button
               onClick={handleToggleActive}
@@ -258,6 +329,7 @@ function UserRow({ user, roles, isSelf }: { user: User; roles: Role[]; isSelf: b
             </button>
           )}
         </div>
+        {showSetPassword && <SetPasswordModal userId={user.id} onClose={() => setShowSetPassword(false)} />}
       </td>
     </tr>
   )

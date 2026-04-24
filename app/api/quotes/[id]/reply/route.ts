@@ -5,17 +5,43 @@ import { sendEmailAsUser } from '@/src/lib/graph'
 
 export const runtime = 'nodejs'
 
+async function sendWithFallback(primaryUserId: string, fallbackUserId: string | null, opts: Omit<Parameters<typeof sendEmailAsUser>[0], 'userId'>) {
+  try {
+    await sendEmailAsUser({ ...opts, userId: primaryUserId })
+  } catch {
+    const nextId = fallbackUserId && fallbackUserId !== primaryUserId ? fallbackUserId : null
+    if (nextId) {
+      try {
+        await sendEmailAsUser({ ...opts, userId: nextId })
+        return
+      } catch {
+        // fall through to any account
+      }
+    }
+    const any = await prisma.account.findFirst({ where: { provider: 'microsoft-entra-id' }, select: { userId: true } })
+    if (any && any.userId !== primaryUserId && any.userId !== nextId) {
+      await sendEmailAsUser({ ...opts, userId: any.userId })
+    } else {
+      throw new Error('No Microsoft account available to send email. Please sign in with Microsoft SSO.')
+    }
+  }
+}
+
 function buildQuoteHtml(quote: NonNullable<Awaited<ReturnType<typeof getQuote>>>, baseUrl: string) {
   const fmt = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 2 })
-  const lineItemRows = quote.lineItems.map((li: { description: string; quantity: unknown; unitPrice: unknown; discount: unknown; taxRate: unknown; lineTotal: unknown }) => `
+  const lineItemRows = quote.lineItems.map((li: { description: string; quantity: unknown; unitPrice: unknown; discount: unknown; taxRate: unknown; lineTotal: unknown }) => {
+    const base = Math.max(0, Number(li.quantity) * Number(li.unitPrice) - Number(li.discount))
+    const taxAmt = base * Number(li.taxRate) / 100
+    return `
     <tr>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">${li.description}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">${Number(li.quantity)}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">$${fmt(Number(li.unitPrice))}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">$${fmt(Number(li.discount))}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">${Number(li.taxRate)}%</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;">$${fmt(taxAmt)}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:600;">$${fmt(Number(li.lineTotal))}</td>
-    </tr>`).join('')
+    </tr>`
+  }).join('')
 
   return `
     <h3 style="font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-top:24px;">Quoted Items</h3>
@@ -26,7 +52,7 @@ function buildQuoteHtml(quote: NonNullable<Awaited<ReturnType<typeof getQuote>>>
           <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Qty</th>
           <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Unit Price</th>
           <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Discount</th>
-          <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Tax</th>
+          <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Tax ($)</th>
           <th style="padding:8px 12px;color:#64748b;font-weight:600;text-align:right;">Total</th>
         </tr>
       </thead>
@@ -54,7 +80,7 @@ async function getQuote(id: string) {
     where: { id },
     include: {
       lineItems: { orderBy: { sortOrder: 'asc' } },
-      owner: { select: { name: true, email: true } },
+      owner: { select: { id: true, name: true, email: true } },
     },
   })
 }
@@ -96,8 +122,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 </html>`
 
   try {
-    await sendEmailAsUser({
-      userId: session.user.id,
+    await sendWithFallback(session.user.id, quote.owner.id, {
       to: [toEmail],
       subject: `Re: Quote ${quote.quoteNumber}`,
       htmlBody,

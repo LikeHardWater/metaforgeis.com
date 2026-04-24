@@ -223,7 +223,7 @@ export async function convertLeadToOpportunity(leadId: string, formData: FormDat
 
   await prisma.crmLead.update({
     where: { id: leadId },
-    data: { convertedAt: new Date(), status: LeadStatus.CONVERTED },
+    data: { convertedAt: new Date(), status: LeadStatus.CONVERTED, convertedToDealId: deal.id },
   });
 
   await auditLog({ action: "LEAD_CONVERTED", userId: session.user.id, userEmail: session.user.email, userRole: session.user.role, entity: "CrmLead", entityId: leadId, after: { dealId: deal.id } });

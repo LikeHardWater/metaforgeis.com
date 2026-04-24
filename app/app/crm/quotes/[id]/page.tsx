@@ -71,6 +71,7 @@ export default async function QuoteDetailPage({ params }: { params: { id: string
     unitPrice: Number(li.unitPrice),
     discount: Number(li.discount),
     taxRate: Number(li.taxRate),
+    taxStateCode: stateTaxes.find((t) => Number(t.taxRate) === Number(li.taxRate))?.stateCode ?? '',
     lineTotal: Number(li.lineTotal),
     sortOrder: li.sortOrder,
   }))

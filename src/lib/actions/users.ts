@@ -6,6 +6,7 @@ import { auth } from "@/src/lib/auth";
 import { prisma } from "@/src/lib/prisma";
 import { auditLog } from "@/src/lib/audit";
 import { canManageUsers } from "@/src/lib/permissions";
+import bcrypt from "bcryptjs";
 
 async function requireAdmin() {
   const session = await auth();
@@ -27,8 +28,11 @@ export async function createUser(formData: FormData) {
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) throw new Error("A user with that email already exists");
 
+  const password = (formData.get("password") as string)?.trim();
+  const passwordHash = password && password.length >= 8 ? await bcrypt.hash(password, 12) : undefined;
+
   const user = await prisma.user.create({
-    data: { email, name, roleId, isActive: true },
+    data: { email, name, roleId, isActive: true, ...(passwordHash ? { passwordHash } : {}) },
   });
 
   await auditLog({
@@ -114,4 +118,30 @@ export async function unlockUser(userId: string) {
   });
 
   revalidatePath("/app/admin/users");
+}
+
+export async function setUserPassword(userId: string, password: string) {
+  await requireAdmin();
+  if (!password || password.length < 8) throw new Error("Password must be at least 8 characters");
+
+  const hash = await bcrypt.hash(password, 12);
+  await prisma.user.update({ where: { id: userId }, data: { passwordHash: hash } });
+  revalidatePath("/app/admin/users");
+}
+
+export async function changeOwnPassword(currentPassword: string, newPassword: string) {
+  const session = await auth();
+  if (!session) throw new Error("Unauthenticated");
+  if (!newPassword || newPassword.length < 8) throw new Error("Password must be at least 8 characters");
+
+  const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+  if (!user) throw new Error("User not found");
+
+  if (user.passwordHash) {
+    const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!valid) throw new Error("Current password is incorrect");
+  }
+
+  const hash = await bcrypt.hash(newPassword, 12);
+  await prisma.user.update({ where: { id: session.user.id }, data: { passwordHash: hash } });
 }
