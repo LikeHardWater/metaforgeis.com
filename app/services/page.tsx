@@ -22,7 +22,7 @@ export default function ServicesPage() {
         eyebrow="What We Do"
         title="Industrial Dock & Door Services"
         subtitle="End-to-end dock and door services for commercial and industrial facilities — from first installation to 24/7 emergency repair."
-        image="https://metaforgeis.com/wp-content/uploads/2025/07/IMG_2248-1920x1080.jpeg"
+        image="/images/MFIS/IMG_2248-1920x1080.jpeg"
         imageAlt="MetaForge dock installation"
       />
 

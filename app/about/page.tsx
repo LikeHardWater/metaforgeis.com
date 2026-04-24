@@ -24,7 +24,7 @@ export default function AboutPage() {
         eyebrow="Who We Are"
         title={about.headline}
         subtitle={about.body}
-        image="https://metaforgeis.com/wp-content/uploads/2025/07/IMG_9925-1024x768.jpg"
+        image="/images/MFIS/IMG_9925-1024x768.jpg"
         imageAlt="MetaForge Industrial Systems team"
       />
 
@@ -61,9 +61,9 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-3 gap-4">
             {[
-              'https://metaforgeis.com/wp-content/uploads/2025/07/IMG_0199.jpeg',
-              'https://metaforgeis.com/wp-content/uploads/2025/07/IMG_4299.jpeg',
-              'https://metaforgeis.com/wp-content/uploads/2025/07/IMG_2501.jpeg',
+              '/images/MFIS/IMG_0199.jpeg',
+              '/images/MFIS/IMG_4299.jpeg',
+              '/images/MFIS/IMG_2501.jpeg',
             ].map((url, i) => (
               <div key={i} className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
                 <SafeImage

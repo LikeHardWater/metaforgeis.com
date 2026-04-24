@@ -25,10 +25,10 @@ export const metadata: Metadata = {
 }
 
 const galleryPreview = [
-  'https://metaforgeis.com/wp-content/uploads/2025/07/IMG_2248-1920x1080.jpeg',
-  'https://metaforgeis.com/wp-content/uploads/2025/07/IMG_4117-1920x1080.jpeg',
-  'https://metaforgeis.com/wp-content/uploads/2025/07/IMG_2808-1920x1080.jpeg',
-  'https://metaforgeis.com/wp-content/uploads/2025/07/IMG_9923-scaled-1920x1080.jpg',
+  '/images/MFIS/IMG_2248-1920x1080.jpeg',
+  '/images/MFIS/IMG_4117-1920x1080.jpeg',
+  '/images/MFIS/IMG_2808-1920x1080.jpeg',
+  '/images/MFIS/IMG_9923-scaled-1920x1080.jpg',
 ]
 
 export default function HomePage() {
@@ -76,7 +76,7 @@ export default function HomePage() {
             </div>
             <div className="relative h-72 sm:h-96 rounded-lg overflow-hidden bg-gray-100">
               <SafeImage
-                src="https://metaforgeis.com/wp-content/uploads/2025/07/IMG_2313-1024x768.jpeg"
+                src="/images/MFIS/IMG_2313-1024x768.jpeg"
                 alt="MetaForge installation team at work"
                 fill
                 className="object-cover"

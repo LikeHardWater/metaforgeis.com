@@ -22,7 +22,7 @@ export default function ContactPage() {
         eyebrow="Get In Touch"
         title={contact.headline}
         subtitle={contact.subheadline}
-        image="https://metaforgeis.com/wp-content/uploads/2025/07/IMG_0193-1920x1080.jpeg"
+        image="/images/MFIS/IMG_0193-1920x1080.jpeg"
         imageAlt="MetaForge team at work"
       />
 

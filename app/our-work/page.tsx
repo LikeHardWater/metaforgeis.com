@@ -22,7 +22,7 @@ export default function OurWorkPage() {
         eyebrow="Portfolio"
         title="Our Work"
         subtitle="Dock equipment installations, industrial door systems, and facility projects across DFW and Omaha-Council Bluffs."
-        image="https://metaforgeis.com/wp-content/uploads/2025/07/IMG_4117-1920x1080.jpeg"
+        image="/images/MFIS/IMG_4117-1920x1080.jpeg"
         imageAlt="MetaForge dock installation project"
       />
 

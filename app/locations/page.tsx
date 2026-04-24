@@ -22,7 +22,7 @@ export default function LocationsPage() {
         eyebrow="Where We Operate"
         title="Two Regional Locations"
         subtitle="Serving DFW from Flower Mound, TX and the Omaha-Council Bluffs metro from Crescent, IA."
-        image="https://metaforgeis.com/wp-content/uploads/2025/07/IMG_4357-1920x1080.jpeg"
+        image="/images/MFIS/IMG_4357-1920x1080.jpeg"
         imageAlt="MetaForge installation team on site"
       />
 
