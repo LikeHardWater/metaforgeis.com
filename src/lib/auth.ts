@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
@@ -64,18 +63,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter,
 
   providers: [
-    MicrosoftEntraID({
-      clientId: process.env.AZURE_AD_CLIENT_ID!,
-      clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
-      // @ts-expect-error -- tenantId exists at runtime but is absent from beta.31 OIDCUserConfig types
-      tenantId: process.env.AZURE_AD_TENANT_ID!,
-      authorization: {
-        params: {
-          scope: 'openid profile email offline_access Mail.Send',
-        },
-      },
-    }),
-
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
@@ -184,7 +171,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       if (user) {
         const u = user as AuthUser;
         token.userId = u.id;
@@ -193,32 +180,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.mfaEnabled = u.mfaEnabled;
         token.mfaVerified = false;
       }
-
-      if (account?.provider === "microsoft-entra-id" && user?.email) {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: user.email },
-          include: { role: true },
-        });
-        if (dbUser) {
-          token.userId = dbUser.id;
-          token.role = dbUser.role.name;
-          token.systemRole = dbUser.role.systemRole;
-          token.mfaEnabled = dbUser.mfaEnabled;
-
-          // Persist fresh tokens from this sign-in (PrismaAdapter only creates, never updates)
-          if (account.access_token) {
-            await prisma.account.updateMany({
-              where: { userId: dbUser.id, provider: 'microsoft-entra-id' },
-              data: {
-                access_token: account.access_token,
-                refresh_token: account.refresh_token ?? undefined,
-                expires_at: account.expires_at ?? undefined,
-              },
-            })
-          }
-        }
-      }
-
       return token;
     },
 

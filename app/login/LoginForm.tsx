@@ -15,7 +15,6 @@ function LoginFormInner() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [msLoading, setMsLoading] = useState(false)
 
   const handleCredentials = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,11 +31,6 @@ function LoginFormInner() {
           : 'Invalid email or password.'
       )
     }
-  }
-
-  const handleMicrosoft = async () => {
-    setMsLoading(true)
-    await signIn('microsoft-entra-id', { callbackUrl })
   }
 
   return (
@@ -58,22 +52,6 @@ function LoginFormInner() {
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={handleMicrosoft}
-            disabled={msLoading || loading}
-            className="w-full flex items-center justify-center gap-3 bg-[#0078d4] hover:bg-[#006cbf] disabled:opacity-60 text-white font-semibold py-3 px-4 rounded-lg transition-colors min-h-[44px]"
-          >
-            {msLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <MicrosoftIcon />}
-            {msLoading ? 'Redirecting...' : 'Sign in with Microsoft 365'}
-          </button>
-
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-100" />
-            <span className="text-gray-500 text-xs uppercase tracking-widest">or</span>
-            <div className="flex-1 h-px bg-gray-100" />
-          </div>
-
           <form onSubmit={handleCredentials} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-1.5">Email</label>
@@ -87,7 +65,7 @@ function LoginFormInner() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-gray-100 border border-gray-200 focus:border-gold rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors min-h-[44px]" />
             </div>
-            <button type="submit" disabled={loading || msLoading}
+            <button type="submit" disabled={loading}
               className="w-full bg-gold hover:bg-gold-dark disabled:opacity-60 text-dark-bg font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 min-h-[44px]">
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {loading ? 'Signing in...' : 'Sign In'}
@@ -100,17 +78,6 @@ function LoginFormInner() {
         </p>
       </div>
     </div>
-  )
-}
-
-function MicrosoftIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1" y="1" width="9" height="9" fill="#f25022" />
-      <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
-      <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
-      <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
-    </svg>
   )
 }
 
