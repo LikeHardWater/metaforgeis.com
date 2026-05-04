@@ -1,15 +1,5 @@
-import NextAuth from "next-auth";
-import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
-import Credentials from "next-auth/providers/credentials";
 import { NextResponse } from "next/server";
-
-// Lightweight auth for Edge Runtime — JWT only, no DB adapter
-const { auth } = NextAuth({
-  providers: [MicrosoftEntraID, Credentials],
-  session: { strategy: "jwt" },
-  secret: process.env.AUTH_SECRET,
-  trustHost: true,
-});
+import type { NextRequest } from "next/server";
 
 const PUBLIC_PATHS = [
   "/login",
@@ -22,23 +12,31 @@ const PUBLIC_PATHS = [
   "/images",
 ];
 
-export default auth((req) => {
+const PROTECTED_PREFIXES = ["/app", "/admin"];
+
+export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
-  if (isPublic) return NextResponse.next();
+  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
+    return NextResponse.next();
+  }
 
-  const isProtected =
-    pathname.startsWith("/app") || pathname.startsWith("/admin");
+  if (PROTECTED_PREFIXES.some((p) => pathname.startsWith(p))) {
+    // Check cookie existence only — JWT verification happens server-side in layouts/pages
+    // where AUTH_SECRET is available in the Node.js Lambda environment.
+    const hasSession =
+      req.cookies.has("next-auth.session-token") ||
+      req.cookies.has("__Secure-next-auth.session-token");
 
-  if (isProtected && !req.auth) {
-    const loginUrl = new URL("/login", req.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
+    if (!hasSession) {
+      const loginUrl = new URL("/login", req.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
