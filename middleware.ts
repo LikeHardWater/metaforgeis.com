@@ -26,7 +26,9 @@ export default function middleware(req: NextRequest) {
     // where AUTH_SECRET is available in the Node.js Lambda environment.
     const hasSession =
       req.cookies.has("next-auth.session-token") ||
-      req.cookies.has("__Secure-next-auth.session-token");
+      req.cookies.has("__Secure-next-auth.session-token") ||
+      req.cookies.has("authjs.session-token") ||
+      req.cookies.has("__Secure-authjs.session-token");
 
     if (!hasSession) {
       const loginUrl = new URL("/login", req.url);
